@@ -113,3 +113,5 @@ flutter:
           weight: 500
         - asset: assets/fonts/IBMPlexSansArabic-SemiBold.ttf
           weight: 600
+  assets:
+    - assets/translations/
