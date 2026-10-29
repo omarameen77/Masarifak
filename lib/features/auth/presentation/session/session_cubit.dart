@@ -3,8 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/error/failure.dart';
 import '../../../../core/result/result.dart';
 import '../../../../core/storage/token_storage.dart';
-import '../../domain/auth_session.dart';
-import '../../domain/feature_flags.dart';
+import '../../domain/entities/auth_session.dart';
+import '../../domain/entities/feature_flags.dart';
 import 'session_state.dart';
 
 typedef ProfileOnboardedLoader = Future<Result<bool>> Function();
@@ -19,7 +19,7 @@ class SessionCubit extends Cubit<SessionState> {
 
   final TokenStorage _tokenStorage;
   final ProfileOnboardedLoader _profileOnboarded;
-  FeatureFlags _flags = FeatureFlags.empty;
+  FeatureFlags _flags = const FeatureFlags.empty();
 
   FeatureFlags get flags => _flags;
 
@@ -29,7 +29,7 @@ class SessionCubit extends Cubit<SessionState> {
       _signedOut();
       return;
     }
-    await _resolveOnboarding(FeatureFlags.empty);
+    await _resolveOnboarding(const FeatureFlags.empty());
   }
 
   Future<void> onSignedIn(AuthSession session, FeatureFlags flags) async {
@@ -60,7 +60,7 @@ class SessionCubit extends Cubit<SessionState> {
   }
 
   void _signedOut() {
-    _flags = FeatureFlags.empty;
+    _flags = const FeatureFlags.empty();
     emit(const SessionSignedOut());
   }
 }

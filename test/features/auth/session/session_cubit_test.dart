@@ -3,8 +3,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:masarifak/core/error/failure.dart';
 import 'package:masarifak/core/result/result.dart';
 import 'package:masarifak/core/storage/token_storage.dart';
-import 'package:masarifak/features/auth/domain/auth_session.dart';
-import 'package:masarifak/features/auth/domain/feature_flags.dart';
+import 'package:masarifak/features/auth/domain/entities/auth_session.dart';
+import 'package:masarifak/features/auth/domain/entities/auth_user.dart';
+import 'package:masarifak/features/auth/domain/entities/feature_flags.dart';
 import 'package:masarifak/features/auth/presentation/session/session_cubit.dart';
 import 'package:masarifak/features/auth/presentation/session/session_state.dart';
 import 'package:mocktail/mocktail.dart';
@@ -17,7 +18,19 @@ void main() {
   const accessToken = 'access-token';
   const refreshToken = 'refresh-token';
   const askFlag = 'ask';
-  const session = AuthSession(accessToken: accessToken, refreshToken: refreshToken);
+  const expiresInSeconds = 900;
+  const user = AuthUser(
+    id: 'user-id',
+    name: 'Test User',
+    email: 'user@test.invalid',
+    emailVerified: true,
+  );
+  const session = AuthSession(
+    accessToken: accessToken,
+    refreshToken: refreshToken,
+    expiresInSeconds: expiresInSeconds,
+    user: user,
+  );
   const flags = FeatureFlags({askFlag: true});
 
   late MockTokenStorage tokenStorage;
@@ -72,7 +85,7 @@ void main() {
       },
       build: buildCubit,
       act: (cubit) => cubit.checkStartup(),
-      expect: () => [const SessionSignedIn(FeatureFlags.empty)],
+      expect: () => [const SessionSignedIn(FeatureFlags.empty())],
     );
 
     blocTest<SessionCubit, SessionState>(
@@ -152,7 +165,7 @@ void main() {
       expect: () => [const SessionSignedOut()],
       verify: (cubit) {
         verify(() => tokenStorage.clear()).called(1);
-        expect(cubit.flags, FeatureFlags.empty);
+        expect(cubit.flags, const FeatureFlags.empty());
       },
     );
 
@@ -175,7 +188,7 @@ void main() {
     await cubit.logout();
 
     expect(cubit.state, const SessionSignedOut());
-    expect(cubit.flags, FeatureFlags.empty);
+    expect(cubit.flags, const FeatureFlags.empty());
     verify(() => tokenStorage.clear()).called(1);
   });
 
@@ -189,7 +202,7 @@ void main() {
     final second = buildCubit();
     await second.checkStartup();
 
-    expect(second.state, const SessionSignedIn(FeatureFlags.empty));
+    expect(second.state, const SessionSignedIn(FeatureFlags.empty()));
     expect(second.flags.isEnabled(askFlag), isFalse);
   });
 }

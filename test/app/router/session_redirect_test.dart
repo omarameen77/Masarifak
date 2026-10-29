@@ -1,11 +1,11 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:masarifak/app/router/session_redirect.dart';
 import 'package:masarifak/core/constants/app_routes.dart';
-import 'package:masarifak/features/auth/domain/feature_flags.dart';
+import 'package:masarifak/features/auth/domain/entities/feature_flags.dart';
 import 'package:masarifak/features/auth/presentation/session/session_state.dart';
 
 void main() {
-  const signedIn = SessionSignedIn(FeatureFlags.empty);
+  const signedIn = SessionSignedIn(FeatureFlags.empty());
   const locations = [AppRoutes.login, AppRoutes.onboarding, AppRoutes.home];
 
   final expected = <SessionState, Map<String, String?>>{

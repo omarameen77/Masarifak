@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-import '../../domain/feature_flags.dart';
+import '../../domain/entities/feature_flags.dart';
 
 sealed class SessionState extends Equatable {
   const SessionState();
