@@ -1,0 +1,16 @@
+# Open items
+
+- Remove temporary language toggle on Home before release (`lib/app/placeholder_screen.dart`)
+- Tablet layout: prototype caps content width at 440px, not applied in pilot (`lib/core/theme/app_theme.dart`)
+- Focus ring: 3px glow from prototype not implemented, using accent border only (`lib/core/theme/app_theme.dart`)
+- Backend: refresh token endpoint undocumented, blocked (network layer, Step 5)
+- Backend: `POST /logout` and `DELETE /push-tokens`, undocumented request/response (Step 11)
+- Backend: confirm locale `en` and digits `latin` (Step 6)
+- Backend: confirm `X-Platform: android` and `Accept-Language: en` (Step 4)
+- Backend: `restore_token` location in 403 body (Step 6)
+- Backend: reset deep link format (Step 9)
+- Backend: verify email deep link format (Step 10)
+- Review: restore account dialog design (Step 7)
+- Review: reset password screen design (Step 9)
+- Environments: base URL flavors or `--dart-define` (Step 4)
+- Store release: change application ID from `com.example.masarifak` (`android/app/build.gradle.kts`)
