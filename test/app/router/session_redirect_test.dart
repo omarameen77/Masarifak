@@ -1,0 +1,41 @@
+import 'package:flutter_test/flutter_test.dart';
+import 'package:masarifak/app/router/session_redirect.dart';
+import 'package:masarifak/core/constants/app_routes.dart';
+import 'package:masarifak/features/auth/domain/feature_flags.dart';
+import 'package:masarifak/features/auth/presentation/session/session_state.dart';
+
+void main() {
+  const signedIn = SessionSignedIn(FeatureFlags.empty);
+  const locations = [AppRoutes.login, AppRoutes.onboarding, AppRoutes.home];
+
+  final expected = <SessionState, Map<String, String?>>{
+    const SessionUnknown(): {
+      AppRoutes.login: null,
+      AppRoutes.onboarding: null,
+      AppRoutes.home: null,
+    },
+    const SessionSignedOut(): {
+      AppRoutes.login: null,
+      AppRoutes.onboarding: AppRoutes.login,
+      AppRoutes.home: AppRoutes.login,
+    },
+    const SessionNeedsOnboarding(): {
+      AppRoutes.login: AppRoutes.onboarding,
+      AppRoutes.onboarding: null,
+      AppRoutes.home: AppRoutes.onboarding,
+    },
+    signedIn: {
+      AppRoutes.login: AppRoutes.home,
+      AppRoutes.onboarding: AppRoutes.home,
+      AppRoutes.home: null,
+    },
+  };
+
+  for (final MapEntry(key: state, value: targets) in expected.entries) {
+    for (final location in locations) {
+      test('${state.runtimeType} at $location redirects to ${targets[location]}', () {
+        expect(sessionRedirect(state, location), targets[location]);
+      });
+    }
+  }
+}
