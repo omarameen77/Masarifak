@@ -4,5 +4,13 @@
   "onboarding_title": "Setup",
   "home_title": "Home",
   "placeholder_text": "This screen is still being built.",
-  "language_toggle": "العربية"
+  "language_toggle": "العربية",
+  "error_network": "No internet connection. Check your connection and try again.",
+  "error_timeout": "The connection took too long. Try again.",
+  "error_unauthorized": "Your session has ended. Please log in again.",
+  "error_rate_limit": "Too many attempts. Wait a moment and try again.",
+  "error_validation": "Some details are not valid. Check them and try again.",
+  "error_conflict": "This request can't be completed right now.",
+  "error_server": "Something went wrong on our side. Try again in a little while.",
+  "error_unknown": "Something went wrong. Try again."
 }

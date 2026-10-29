@@ -4,5 +4,13 @@
   "onboarding_title": "الإعداد",
   "home_title": "الرئيسية",
   "placeholder_text": "الشاشة دي لسه بتتعمل.",
-  "language_toggle": "English"
+  "language_toggle": "English",
+  "error_network": "مفيش إنترنت. اتأكد من الاتصال وجرّب تاني.",
+  "error_timeout": "الاتصال أخد وقت طويل. جرّب تاني.",
+  "error_unauthorized": "الجلسة خلصت. سجّل دخولك تاني.",
+  "error_rate_limit": "محاولات كتير. استنى شوية وجرّب تاني.",
+  "error_validation": "فيه بيانات مش مظبوطة. راجعها وجرّب تاني.",
+  "error_conflict": "مينفعش نكمّل الطلب ده دلوقتي.",
+  "error_server": "حصلت مشكلة عندنا. جرّب تاني بعد شوية.",
+  "error_unknown": "حصلت مشكلة. جرّب تاني."
 }
