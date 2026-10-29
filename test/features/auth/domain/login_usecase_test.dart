@@ -18,7 +18,6 @@ void main() {
   const user = AuthUser(
     id: 'user-id',
     name: 'Test User',
-    email: email,
     emailVerified: true,
   );
   const session = AuthSession(

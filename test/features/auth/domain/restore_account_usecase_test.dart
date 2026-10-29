@@ -20,7 +20,6 @@ void main() {
     user: AuthUser(
       id: 'user-id',
       name: 'Test User',
-      email: 'user@test.invalid',
       emailVerified: true,
     ),
   );

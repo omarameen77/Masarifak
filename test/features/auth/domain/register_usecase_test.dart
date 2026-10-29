@@ -21,7 +21,7 @@ void main() {
     accessToken: 'access-token',
     refreshToken: 'refresh-token',
     expiresInSeconds: 900,
-    user: AuthUser(id: 'user-id', name: name, email: email, emailVerified: false),
+    user: AuthUser(id: 'user-id', name: name, emailVerified: false),
   );
   const flags = FeatureFlags.empty();
 

@@ -4,13 +4,13 @@ class AuthUser extends Equatable {
   const AuthUser({
     required this.id,
     required this.name,
-    required this.email,
+    this.email,
     required this.emailVerified,
   });
 
   final String id;
   final String name;
-  final String email;
+  final String? email;
   final bool emailVerified;
 
   @override
