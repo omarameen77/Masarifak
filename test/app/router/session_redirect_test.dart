@@ -41,6 +41,20 @@ void main() {
     });
   }
 
+  for (final step in AppRoutes.onboardingSteps) {
+    test('SessionNeedsOnboarding stays on $step', () {
+      expect(sessionRedirect(const SessionNeedsOnboarding(), step), isNull);
+    });
+
+    test('SessionSignedIn on $step redirects to home', () {
+      expect(sessionRedirect(signedIn, step), AppRoutes.home);
+    });
+
+    test('SessionSignedOut on $step redirects to login', () {
+      expect(sessionRedirect(const SessionSignedOut(), step), AppRoutes.login);
+    });
+  }
+
   for (final MapEntry(key: state, value: targets) in expected.entries) {
     for (final location in locations) {
       test('${state.runtimeType} at $location redirects to ${targets[location]}', () {

@@ -9,10 +9,12 @@ String? sessionRedirect(SessionState state, String currentLocation) =>
             ? null
             : AppRoutes.login,
       SessionNeedsOnboarding() =>
-        currentLocation == AppRoutes.onboarding ? null : AppRoutes.onboarding,
+        AppRoutes.onboardingRoutes.contains(currentLocation)
+            ? null
+            : AppRoutes.onboarding,
       SessionSignedIn() =>
         AppRoutes.signedOutRoutes.contains(currentLocation) ||
-                currentLocation == AppRoutes.onboarding
+                AppRoutes.onboardingRoutes.contains(currentLocation)
             ? AppRoutes.home
             : null,
     };

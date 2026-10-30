@@ -31,6 +31,24 @@ import '../../features/auth/presentation/register/register_cubit.dart' as _i837;
 import '../../features/auth/presentation/session/profile_onboarded_loader.dart'
     as _i330;
 import '../../features/auth/presentation/session/session_cubit.dart' as _i371;
+import '../../features/onboarding/data/local_onboarding_repository.dart'
+    as _i742;
+import '../../features/onboarding/data/onboarding_api.dart' as _i735;
+import '../../features/onboarding/data/onboarding_remote_data_source.dart'
+    as _i349;
+import '../../features/onboarding/data/onboarding_repository_impl.dart'
+    as _i624;
+import '../../features/onboarding/di/onboarding_module.dart' as _i568;
+import '../../features/onboarding/domain/repositories/onboarding_repository.dart'
+    as _i430;
+import '../../features/onboarding/domain/usecases/complete_onboarding_usecase.dart'
+    as _i360;
+import '../../features/onboarding/domain/usecases/get_currencies_usecase.dart'
+    as _i305;
+import '../../features/onboarding/domain/usecases/preview_onboarding_usecase.dart'
+    as _i1036;
+import '../../features/onboarding/presentation/onboarding_cubit.dart' as _i161;
+import '../id/id_generator.dart' as _i1000;
 import '../network/auth_interceptor.dart' as _i908;
 import '../network/device_id_provider.dart' as _i46;
 import '../network/dio_factory.dart' as _i798;
@@ -38,6 +56,7 @@ import '../network/headers_interceptor.dart' as _i426;
 import '../network/token_provider.dart' as _i853;
 import '../session/session_expiry_notifier.dart' as _i838;
 import '../storage/token_storage.dart' as _i973;
+import '../time/clock.dart' as _i807;
 import 'network_module.dart' as _i567;
 
 extension GetItInjectableX on _i174.GetIt {
@@ -49,16 +68,22 @@ extension GetItInjectableX on _i174.GetIt {
     final gh = _i526.GetItHelper(this, environment, environmentFilter);
     final networkModule = _$NetworkModule();
     final authModule = _$AuthModule();
+    final onboardingModule = _$OnboardingModule();
     gh.singleton<_i558.FlutterSecureStorage>(() => networkModule.storage());
     gh.singleton<_i838.SessionExpiryNotifier>(
       () => _i838.SessionExpiryNotifier(),
       dispose: (i) => i.dispose(),
     );
+    gh.lazySingleton<_i1000.IdGenerator>(() => _i1000.IdGenerator());
+    gh.lazySingleton<_i807.Clock>(() => _i807.Clock());
     gh.singleton<_i46.DeviceIdProvider>(
       () => networkModule.deviceIdProvider(gh<_i558.FlutterSecureStorage>()),
     );
     gh.singleton<_i973.TokenStorage>(
       () => _i973.TokenStorage(gh<_i558.FlutterSecureStorage>()),
+    );
+    gh.factory<_i742.LocalOnboardingRepository>(
+      () => _i742.LocalOnboardingRepository(gh<_i807.Clock>()),
     );
     gh.singleton<_i426.HeadersInterceptor>(
       () => networkModule.headersInterceptor(gh<_i46.DeviceIdProvider>()),
@@ -85,6 +110,9 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i86.ProfileApi>(
       () => _i86.ProfileApi(gh<_i361.Dio>(instanceName: 'api')),
     );
+    gh.lazySingleton<_i735.OnboardingApi>(
+      () => _i735.OnboardingApi(gh<_i361.Dio>(instanceName: 'api')),
+    );
     gh.singleton<_i361.Dio>(
       () => networkModule.authDio(gh<_i798.DioFactory>()),
       instanceName: 'auth',
@@ -104,6 +132,9 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i973.TokenStorage>(),
       ),
     );
+    gh.factory<_i349.OnboardingRemoteDataSource>(
+      () => _i349.OnboardingRemoteDataSourceImpl(gh<_i735.OnboardingApi>()),
+    );
     gh.factory<_i330.ProfileOnboardedLoader>(
       () => authModule.profileOnboarded(gh<_i787.AuthRepository>()),
     );
@@ -119,6 +150,11 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i272.RestoreAccountUseCase>(
       () => _i272.RestoreAccountUseCase(gh<_i787.AuthRepository>()),
     );
+    gh.factory<_i624.OnboardingRepositoryImpl>(
+      () => _i624.OnboardingRepositoryImpl(
+        gh<_i349.OnboardingRemoteDataSource>(),
+      ),
+    );
     gh.singleton<_i371.SessionCubit>(
       () => _i371.SessionCubit(
         tokenStorage: gh<_i973.TokenStorage>(),
@@ -133,6 +169,30 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i644.LoginCubit>(
       () => _i644.LoginCubit(gh<_i188.LoginUseCase>()),
     );
+    gh.factory<_i430.OnboardingRepository>(
+      () => onboardingModule.repository(
+        gh<_i624.OnboardingRepositoryImpl>(),
+        gh<_i742.LocalOnboardingRepository>(),
+      ),
+    );
+    gh.factory<_i360.CompleteOnboardingUseCase>(
+      () => _i360.CompleteOnboardingUseCase(gh<_i430.OnboardingRepository>()),
+    );
+    gh.factory<_i305.GetCurrenciesUseCase>(
+      () => _i305.GetCurrenciesUseCase(gh<_i430.OnboardingRepository>()),
+    );
+    gh.factory<_i1036.PreviewOnboardingUseCase>(
+      () => _i1036.PreviewOnboardingUseCase(gh<_i430.OnboardingRepository>()),
+    );
+    gh.factory<_i161.OnboardingCubit>(
+      () => _i161.OnboardingCubit(
+        gh<_i305.GetCurrenciesUseCase>(),
+        gh<_i1036.PreviewOnboardingUseCase>(),
+        gh<_i360.CompleteOnboardingUseCase>(),
+        gh<_i1000.IdGenerator>(),
+        gh<_i807.Clock>(),
+      ),
+    );
     return this;
   }
 }
@@ -140,3 +200,5 @@ extension GetItInjectableX on _i174.GetIt {
 class _$NetworkModule extends _i567.NetworkModule {}
 
 class _$AuthModule extends _i433.AuthModule {}
+
+class _$OnboardingModule extends _i568.OnboardingModule {}

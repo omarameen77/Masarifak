@@ -27,6 +27,14 @@ import 'package:masarifak/features/auth/presentation/register/register_cubit.dar
 import 'package:masarifak/features/auth/presentation/register/register_screen.dart';
 import 'package:masarifak/features/auth/presentation/session/session_cubit.dart';
 import 'package:masarifak/features/auth/presentation/session/session_state.dart';
+import 'package:masarifak/core/id/id_generator.dart';
+import 'package:masarifak/core/time/clock.dart';
+import 'package:masarifak/features/onboarding/data/local_onboarding_repository.dart';
+import 'package:masarifak/features/onboarding/domain/usecases/complete_onboarding_usecase.dart';
+import 'package:masarifak/features/onboarding/domain/usecases/get_currencies_usecase.dart';
+import 'package:masarifak/features/onboarding/domain/usecases/preview_onboarding_usecase.dart';
+import 'package:masarifak/features/onboarding/presentation/onboarding_cubit.dart';
+import 'package:masarifak/features/onboarding/presentation/onboarding_shell.dart';
 import 'package:mocktail/mocktail.dart';
 
 class MockLoginUseCase extends Mock implements LoginUseCase {}
@@ -49,6 +57,7 @@ Widget buildApp(GoRouter router, SessionCubit sessionCubit) => EasyLocalization(
   fallbackLocale: AppLocales.fallback,
   startLocale: AppLocales.arabic,
   useOnlyLangCode: true,
+  ignorePluralRules: false,
   saveLocale: true,
   child: Builder(
     builder: (context) => BlocProvider<SessionCubit>.value(
@@ -65,14 +74,16 @@ Widget buildApp(GoRouter router, SessionCubit sessionCubit) => EasyLocalization(
 );
 
 Future<GoRouter> pumpApp(
-  WidgetTester tester, [
+  WidgetTester tester, {
   MockSessionCubit? session,
-]) async {
+  SessionState initialState = const SessionSignedOut(),
+  Finder? until,
+}) async {
   final sessionCubit = session ?? MockSessionCubit();
   whenListen(
     sessionCubit,
     const Stream<SessionState>.empty(),
-    initialState: const SessionSignedOut(),
+    initialState: initialState,
   );
   final refresh = ChangeNotifier();
   addTearDown(refresh.dispose);
@@ -82,7 +93,7 @@ Future<GoRouter> pumpApp(
   );
   addTearDown(router.dispose);
 
-  final screen = find.byType(LoginScreen);
+  final screen = until ?? find.byType(LoginScreen);
   await tester.runAsync(
     () => tester.pumpWidget(buildApp(router, sessionCubit)),
   );
@@ -119,6 +130,16 @@ void main() {
   });
 
   setUp(() {
+    final localRepository = LocalOnboardingRepository(Clock());
+    getIt.registerFactory<OnboardingCubit>(
+      () => OnboardingCubit(
+        GetCurrenciesUseCase(localRepository),
+        PreviewOnboardingUseCase(localRepository),
+        CompleteOnboardingUseCase(localRepository),
+        IdGenerator(),
+        Clock(),
+      ),
+    );
     getIt.registerFactory<LoginCubit>(() => LoginCubit(MockLoginUseCase()));
     getIt.registerFactory<RegisterCubit>(
       () => RegisterCubit(MockRegisterUseCase()),
@@ -215,9 +236,66 @@ void main() {
     variant: const TargetPlatformVariant({TargetPlatform.android}),
   );
 
+  testWidgets('needs onboarding lands on the income step inside the shell', (tester) async {
+    final incomeTitle = find.text(
+      arabicText(TranslationKeys.onboardingIncomeTitle),
+    );
+    final router = await pumpApp(
+      tester,
+      initialState: const SessionNeedsOnboarding(),
+      until: incomeTitle,
+    );
+
+    expect(currentPath(router), AppRoutes.onboardingIncome);
+    expect(find.byType(OnboardingShell), findsOneWidget);
+  });
+
+  testWidgets('onboarding steps push inside the shell and pop back', (tester) async {
+    final router = await pumpApp(
+      tester,
+      initialState: const SessionNeedsOnboarding(),
+      until: find.text(arabicText(TranslationKeys.onboardingIncomeTitle)),
+    );
+    final cubit = BlocProvider.of<OnboardingCubit>(
+      tester.element(find.byType(OnboardingShell)),
+    );
+
+    router.push(AppRoutes.onboardingObligations);
+    await tester.pumpAndSettle();
+    expect(currentPath(router), AppRoutes.onboardingObligations);
+    expect(
+      BlocProvider.of<OnboardingCubit>(
+        tester.element(find.byType(OnboardingShell)),
+      ),
+      same(cubit),
+    );
+
+    router.pop();
+    await tester.pumpAndSettle();
+    expect(currentPath(router), AppRoutes.onboardingIncome);
+  });
+
+  testWidgets('onboarding back arrow shows from step two and pops', (tester) async {
+    final router = await pumpApp(
+      tester,
+      initialState: const SessionNeedsOnboarding(),
+      until: find.text(arabicText(TranslationKeys.onboardingIncomeTitle)),
+    );
+    expect(find.byIcon(Icons.arrow_back), findsNothing);
+
+    router.push(AppRoutes.onboardingObligations);
+    await tester.pumpAndSettle();
+    expect(find.byIcon(Icons.arrow_back), findsOneWidget);
+
+    await tester.tap(find.byIcon(Icons.arrow_back));
+    await tester.pumpAndSettle();
+    expect(currentPath(router), AppRoutes.onboardingIncome);
+    expect(find.byIcon(Icons.arrow_back), findsNothing);
+  });
+
   testWidgets('home is shown with a fade transition', (tester) async {
     final sessionCubit = MockSessionCubit();
-    final router = await pumpApp(tester, sessionCubit);
+    final router = await pumpApp(tester, session: sessionCubit);
 
     when(
       () => sessionCubit.state,
