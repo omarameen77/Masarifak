@@ -26,6 +26,7 @@ class _MasarifakAppState extends State<MasarifakApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
+      debugShowCheckedModeBanner: false,
       onGenerateTitle: (_) => TranslationKeys.appName.tr(),
       locale: context.locale,
       supportedLocales: context.supportedLocales,

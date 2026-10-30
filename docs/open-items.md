@@ -9,7 +9,6 @@
 - Backend: request timeouts are a client choice (connect 15s, receive 30s), not documented (`lib/core/constants/api_config.dart`)
 - Backend: Confirm whether /email/resend needs Authorization (currently sent without it, on the auth Dio) (`lib/features/auth/data/auth_api.dart`, Step 10)
 - Wiring: `HeadersInterceptor` language provider defaults to the fallback locale; connect it to the app's current locale when DI is added (`lib/core/network/headers_interceptor.dart`, Step 5)
-- Wiring: `SessionCubit`, `checkStartup()`, router redirect and `AuthInterceptor.onSessionExpired` are not wired into `main.dart`/`app.dart` yet; `createAppRouter` takes the cubit and listenable as optional parameters until DI exists (`lib/app/router/app_router.dart`, Step 6/7)
 - Backend: source of feature flags after app restart (login is the only documented source, §8.2); flags are empty after a restart (`lib/features/auth/presentation/session/session_cubit.dart`)
 - Retry or error state for profile fetch failure at startup; a non-401 failure of `GET /profile` currently signs the user out and keeps the token (`lib/features/auth/presentation/session/session_cubit.dart`)
 - Feature gating: features dependent on flags stay off when the map is empty (`lib/features/auth/domain/entities/feature_flags.dart`)
@@ -28,7 +27,10 @@
 - Account: `AuthUser.email` is null after login/register/restore/reset because those responses have no `email` (§8.2); fill it from `GET /me` in the Account feature (`lib/features/auth/domain/entities/auth_user.dart`)
 - Generated code: `*.g.dart` files (json_serializable, retrofit) are committed and must be regenerated after any model or API change with `dart run build_runner build` (`--delete-conflicting-outputs` is not valid for this build_runner version) (`lib/**/*.g.dart`)
 - CI: once CI exists, check that generated `*.g.dart` files are up to date (run `dart run build_runner build` and fail on a non-empty `git diff`)
-- DI: `AuthApi` (auth Dio), `ProfileApi` (API Dio) and `TokenStorage` are not registered yet; `AuthRemoteDataSourceImpl` and `AuthRepositoryImpl` carry `@Injectable` annotations only (Step 7)
 - Routing: `AppRoutes.register` and `AppRoutes.forgotPassword` are not registered in `createAppRouter`; the Login links show go_router's error page until Steps 8/9 add those routes (`lib/app/router/app_router.dart`)
-- Wiring: `LoginScreen` is not on the `/login` route yet, and a successful `LoginState.outcome` is not handed to `SessionCubit` (no navigation after login) until DI is wired (`lib/features/auth/presentation/login/login_screen.dart`)
+- Wiring: a successful `LoginState.outcome` is not handed to `SessionCubit` yet, so there is no navigation after login (`lib/features/auth/presentation/login/login_screen.dart`)
 - Review: Login uses a top bar with `login_title`; the prototype shows the wallet brand mark instead and a `name@example.com` email placeholder, neither added in the pilot (`lib/features/auth/presentation/login/login_screen.dart`)
+- Remove temporary language toggle and logout placeholder from PlaceholderScreen once Home is built (`lib/app/placeholder_screen.dart`)
+- Password confirm field: not in reference, not added
+- Register strength meter: implement only if the prototype defines the rule; otherwise dropped
+- Unify `context.tr` and `.tr()` usage across the auth screens (`lib/features/auth/presentation/`, `lib/core/widgets/`)

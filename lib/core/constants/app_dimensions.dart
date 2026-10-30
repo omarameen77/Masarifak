@@ -28,8 +28,6 @@ abstract final class AppDimensions {
   static const double headingLineHeight = 1.3;
   static const double secondaryFontSize = 14;
   static const double labelFontSize = 13.5;
-  static const double noteIconSize = 19;
   static const double disabledOpacity = 0.45;
   static const double fieldLabelGap = 6;
-  static const double noteIconGap = 10;
 }

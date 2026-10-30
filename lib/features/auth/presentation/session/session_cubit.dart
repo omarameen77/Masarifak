@@ -1,24 +1,34 @@
+import 'dart:async';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:injectable/injectable.dart';
 
 import '../../../../core/error/failure.dart';
 import '../../../../core/result/result.dart';
+import '../../../../core/session/session_expiry_notifier.dart';
 import '../../../../core/storage/token_storage.dart';
 import '../../domain/entities/auth_session.dart';
 import '../../domain/entities/feature_flags.dart';
+import 'profile_onboarded_loader.dart';
 import 'session_state.dart';
 
-typedef ProfileOnboardedLoader = Future<Result<bool>> Function();
-
+@singleton
 class SessionCubit extends Cubit<SessionState> {
   SessionCubit({
     required TokenStorage tokenStorage,
     required ProfileOnboardedLoader profileOnboarded,
+    required SessionExpiryNotifier sessionExpiryNotifier,
   }) : _tokenStorage = tokenStorage,
        _profileOnboarded = profileOnboarded,
-       super(const SessionUnknown());
+       super(const SessionUnknown()) {
+    _expirySubscription = sessionExpiryNotifier.stream.listen(
+      (_) => logout(),
+    );
+  }
 
   final TokenStorage _tokenStorage;
   final ProfileOnboardedLoader _profileOnboarded;
+  late final StreamSubscription<void> _expirySubscription;
   FeatureFlags _flags = const FeatureFlags.empty();
 
   FeatureFlags get flags => _flags;
@@ -45,6 +55,13 @@ class SessionCubit extends Cubit<SessionState> {
     _signedOut();
   }
 
+  @disposeMethod
+  @override
+  Future<void> close() async {
+    await _expirySubscription.cancel();
+    return super.close();
+  }
+
   Future<void> _resolveOnboarding(FeatureFlags flags) async {
     switch (await _profileOnboarded()) {
       case Success(data: true):
@@ -61,6 +78,6 @@ class SessionCubit extends Cubit<SessionState> {
 
   void _signedOut() {
     _flags = const FeatureFlags.empty();
-    emit(const SessionSignedOut());
+    if (!isClosed) emit(const SessionSignedOut());
   }
 }

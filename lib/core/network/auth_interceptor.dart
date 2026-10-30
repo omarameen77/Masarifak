@@ -1,20 +1,22 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
+import 'package:injectable/injectable.dart';
 
 import '../constants/api_headers.dart';
+import '../session/session_expiry_notifier.dart';
 import 'token_provider.dart';
 
+@injectable
 class AuthInterceptor extends Interceptor {
   AuthInterceptor(
-    TokenProvider tokenProvider, {
-    required VoidCallback onSessionExpired,
-  }) : _tokenProvider = tokenProvider,
-       _onSessionExpired = onSessionExpired;
+    TokenProvider tokenProvider,
+    SessionExpiryNotifier sessionExpiryNotifier,
+  ) : _tokenProvider = tokenProvider,
+      _sessionExpiryNotifier = sessionExpiryNotifier;
 
   final TokenProvider _tokenProvider;
-  final VoidCallback _onSessionExpired;
+  final SessionExpiryNotifier _sessionExpiryNotifier;
 
   @override
   Future<void> onRequest(
@@ -42,7 +44,7 @@ class AuthInterceptor extends Interceptor {
     if (carriedBearer &&
         err.response?.statusCode == HttpStatus.unauthorized) {
       await _tokenProvider.clear();
-      _onSessionExpired();
+      _sessionExpiryNotifier.notifyExpired();
     }
     handler.next(err);
   }

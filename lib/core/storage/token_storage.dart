@@ -1,8 +1,10 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:injectable/injectable.dart';
 
 import '../constants/storage_keys.dart';
 import '../network/token_provider.dart';
 
+@singleton
 class TokenStorage implements TokenProvider {
   TokenStorage(FlutterSecureStorage storage) : _storage = storage;
 

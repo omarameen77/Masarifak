@@ -22,5 +22,11 @@
   "login_forgot_password": "Forgot your password?",
   "login_register_link": "Don't have an account? Create one",
   "login_show_password": "Show password",
-  "login_hide_password": "Hide password"
+  "login_hide_password": "Hide password",
+  "validation_required": "This field is required",
+  "validation_email_invalid": "Enter a valid email",
+  "validation_password_too_short": "Password is too short",
+  "validation_password_too_long": "Password is too long",
+  "error_dialog_title": "Something went wrong",
+  "error_dialog_action": "OK"
 }

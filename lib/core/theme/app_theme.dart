@@ -135,6 +135,27 @@ abstract final class AppTheme {
           shape: controlShape,
         ),
       ),
+      dialogTheme: DialogThemeData(
+        backgroundColor: c.surface,
+        surfaceTintColor: Colors.transparent,
+        barrierColor: c.scrim,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppDimensions.radiusLarge),
+        ),
+        titleTextStyle: TextStyle(
+          fontFamily: AppAssets.fontFamily,
+          fontSize: AppDimensions.titleFontSize,
+          fontWeight: FontWeight.w600,
+          color: c.ink,
+        ),
+        contentTextStyle: TextStyle(
+          fontFamily: AppAssets.fontFamily,
+          fontSize: AppDimensions.bodyFontSize,
+          height: AppDimensions.bodyLineHeight,
+          color: c.ink2,
+        ),
+        actionsPadding: const EdgeInsets.all(AppDimensions.lg),
+      ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: c.surface,
@@ -147,6 +168,11 @@ abstract final class AppTheme {
         focusedBorder: inputBorder(c.acc),
         errorBorder: inputBorder(c.crit),
         focusedErrorBorder: inputBorder(c.crit),
+        labelStyle: TextStyle(
+          fontSize: AppDimensions.labelFontSize,
+          fontWeight: FontWeight.w500,
+          color: c.ink2,
+        ),
         hintStyle: TextStyle(color: c.muted),
         errorStyle: TextStyle(
           color: c.crit,

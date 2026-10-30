@@ -1,7 +1,9 @@
 import 'package:dio/dio.dart';
+import 'package:injectable/injectable.dart';
 import 'package:retrofit/retrofit.dart';
 
 import '../../../core/constants/api_paths.dart';
+import '../../../core/constants/di_names.dart';
 import '../../../core/network/data_envelope.dart';
 import 'models/auth_requests.dart';
 import 'models/session_dto.dart';
@@ -9,9 +11,11 @@ import 'models/verified_email_dto.dart';
 
 part 'auth_api.g.dart';
 
+@lazySingleton
 @RestApi()
 abstract class AuthApi {
-  factory AuthApi(Dio dio) = _AuthApi;
+  @factoryMethod
+  factory AuthApi(@Named(DiNames.authDio) Dio dio) = _AuthApi;
 
   @POST(ApiPaths.login)
   Future<DataEnvelope<SessionDto>> login(@Body() LoginRequest request);

@@ -11,7 +11,9 @@ import 'package:masarifak/core/constants/app_assets.dart';
 import 'package:masarifak/core/constants/app_locales.dart';
 import 'package:masarifak/core/constants/app_routes.dart';
 import 'package:masarifak/core/constants/translation_keys.dart';
+import 'package:masarifak/core/di/injection.dart';
 import 'package:masarifak/core/theme/app_colors.dart';
+import 'package:masarifak/features/auth/presentation/login/login_screen.dart';
 
 const _maxLoadAttempts = 50;
 const _loadPollInterval = Duration(milliseconds: 20);
@@ -33,8 +35,8 @@ Widget buildApp() => EasyLocalization(
   child: const MasarifakApp(),
 );
 
-TextDirection directionOfPlaceholder(WidgetTester tester) =>
-    Directionality.of(tester.element(find.byType(PlaceholderScreen)));
+TextDirection directionOf(WidgetTester tester, Type screen) =>
+    Directionality.of(tester.element(find.byType(screen)));
 
 Future<void> loadAndPumpUntilFound(
   WidgetTester tester,
@@ -57,6 +59,10 @@ void main() {
     english = await readTranslations(AppLocales.english);
   });
 
+  setUp(configureDependencies);
+
+  tearDown(getIt.reset);
+
   testWidgets('Arabic locale renders right-to-left with real translations', (tester) async {
     await loadAndPumpUntilFound(
       tester,
@@ -64,17 +70,17 @@ void main() {
       find.text(arabic[TranslationKeys.loginTitle] as String),
     );
 
-    expect(directionOfPlaceholder(tester), TextDirection.rtl);
+    expect(directionOf(tester, LoginScreen), TextDirection.rtl);
   });
 
   testWidgets('language toggle switches to English left-to-right', (tester) async {
     await loadAndPumpUntilFound(
       tester,
       () => tester.pumpWidget(buildApp()),
-      find.byType(PlaceholderScreen),
+      find.byType(LoginScreen),
     );
 
-    GoRouter.of(tester.element(find.byType(PlaceholderScreen))).go(AppRoutes.home);
+    GoRouter.of(tester.element(find.byType(LoginScreen))).go(AppRoutes.home);
     await tester.pumpAndSettle();
     expect(find.text(arabic[TranslationKeys.homeTitle] as String), findsOneWidget);
 
@@ -84,14 +90,14 @@ void main() {
       find.text(english[TranslationKeys.homeTitle] as String),
     );
 
-    expect(directionOfPlaceholder(tester), TextDirection.ltr);
+    expect(directionOf(tester, PlaceholderScreen), TextDirection.ltr);
   });
 
   testWidgets('applies the light AppColors theme only', (tester) async {
     await loadAndPumpUntilFound(
       tester,
       () => tester.pumpWidget(buildApp()),
-      find.byType(PlaceholderScreen),
+      find.byType(LoginScreen),
     );
 
     final app = tester.widget<MaterialApp>(find.byType(MaterialApp));
@@ -99,7 +105,7 @@ void main() {
     expect(app.darkTheme, isNull);
 
     final colors = Theme.of(
-      tester.element(find.byType(PlaceholderScreen)),
+      tester.element(find.byType(LoginScreen)),
     ).extension<AppColors>()!;
     expect(colors.bg, const Color(0xFFF7F6F2));
   });

@@ -4,10 +4,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/constants/app_dimensions.dart';
 import '../../../../core/constants/translation_keys.dart';
+import '../../../../core/widgets/app_error_dialog.dart';
 import 'login_cubit.dart';
 import 'login_failure_message.dart';
 import 'login_state.dart';
-import 'widgets/login_error_note.dart';
 import 'widgets/login_footer_links.dart';
 import 'widgets/login_form.dart';
 import 'widgets/login_header.dart';
@@ -19,7 +19,14 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(context.tr(TranslationKeys.loginTitle))),
-      body: BlocBuilder<LoginCubit, LoginState>(
+      body: BlocConsumer<LoginCubit, LoginState>(
+        listenWhen: (previous, current) =>
+            current.failure != null && current.failure != previous.failure,
+        listener: (context, state) {
+          if (state.failure case final failure?) {
+            AppErrorDialog.show(context, messageKey: loginFailureKey(failure));
+          }
+        },
         builder: (context, state) => SingleChildScrollView(
           padding: const EdgeInsets.all(AppDimensions.pageGutter),
           child: Column(
@@ -27,10 +34,6 @@ class LoginScreen extends StatelessWidget {
             children: [
               const LoginHeader(),
               const SizedBox(height: AppDimensions.lg),
-              if (state.failure case final failure?) ...[
-                LoginErrorNote(messageKey: loginFailureKey(failure)),
-                const SizedBox(height: AppDimensions.md),
-              ],
               LoginForm(state: state),
               const SizedBox(height: AppDimensions.sm),
               const LoginFooterLinks(),

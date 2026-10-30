@@ -6,6 +6,7 @@ import 'package:masarifak/core/constants/api_config.dart';
 import 'package:masarifak/core/constants/api_headers.dart';
 import 'package:masarifak/core/network/auth_interceptor.dart';
 import 'package:masarifak/core/network/token_provider.dart';
+import 'package:masarifak/core/session/session_expiry_notifier.dart';
 import 'package:mocktail/mocktail.dart';
 
 class MockTokenProvider extends Mock implements TokenProvider {}
@@ -29,19 +30,22 @@ class StatusAdapter implements HttpClientAdapter {
 void main() {
   const accessToken = 'access-token';
   late MockTokenProvider tokenProvider;
+  late SessionExpiryNotifier notifier;
   late int expiredCalls;
 
   setUp(() {
     tokenProvider = MockTokenProvider();
+    notifier = SessionExpiryNotifier();
     expiredCalls = 0;
+    notifier.stream.listen((_) => expiredCalls++);
     when(() => tokenProvider.clear()).thenAnswer((_) async {});
   });
 
+  tearDown(() => notifier.dispose());
+
   Dio buildDio(int status) => Dio(BaseOptions(baseUrl: ApiConfig.apiBaseUrl))
     ..httpClientAdapter = StatusAdapter(status)
-    ..interceptors.add(
-      AuthInterceptor(tokenProvider, onSessionExpired: () => expiredCalls++),
-    );
+    ..interceptors.add(AuthInterceptor(tokenProvider, notifier));
 
   test('401 on a request that carried a bearer token clears the token and expires the session once', () async {
     when(() => tokenProvider.readAccessToken()).thenAnswer((_) async => accessToken);

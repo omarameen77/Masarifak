@@ -2,10 +2,12 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:masarifak/core/error/failure.dart';
 import 'package:masarifak/core/result/result.dart';
+import 'package:masarifak/core/session/session_expiry_notifier.dart';
 import 'package:masarifak/core/storage/token_storage.dart';
 import 'package:masarifak/features/auth/domain/entities/auth_session.dart';
 import 'package:masarifak/features/auth/domain/entities/auth_user.dart';
 import 'package:masarifak/features/auth/domain/entities/feature_flags.dart';
+import 'package:masarifak/features/auth/presentation/session/profile_onboarded_loader.dart';
 import 'package:masarifak/features/auth/presentation/session/session_cubit.dart';
 import 'package:masarifak/features/auth/presentation/session/session_state.dart';
 import 'package:mocktail/mocktail.dart';
@@ -36,15 +38,21 @@ void main() {
   late Result<bool> profileResult;
   late List<Call> calls;
 
+  late SessionExpiryNotifier notifier;
+
   SessionCubit buildCubit() => SessionCubit(
     tokenStorage: tokenStorage,
-    profileOnboarded: () async {
+    profileOnboarded: ProfileOnboardedLoader(() async {
       calls.add(Call.profile);
       return profileResult;
-    },
+    }),
+    sessionExpiryNotifier: notifier,
   );
 
+  tearDown(() => notifier.dispose());
+
   setUp(() {
+    notifier = SessionExpiryNotifier();
     tokenStorage = MockTokenStorage();
     calls = [];
     when(() => tokenStorage.clear()).thenAnswer((_) async {});

@@ -22,5 +22,11 @@
   "login_forgot_password": "نسيت كلمة السر؟",
   "login_register_link": "معندكش حساب؟ اعمل واحد",
   "login_show_password": "اظهر كلمة السر",
-  "login_hide_password": "اخفي كلمة السر"
+  "login_hide_password": "اخفي كلمة السر",
+  "validation_required": "الخانة دي مطلوبة",
+  "validation_email_invalid": "الإيميل مش صحيح",
+  "validation_password_too_short": "كلمة السر قصيرة",
+  "validation_password_too_long": "كلمة السر طويلة",
+  "error_dialog_title": "حصلت مشكلة",
+  "error_dialog_action": "تمام"
 }

@@ -23,4 +23,12 @@ abstract final class TranslationKeys {
   static const String loginRegisterLink = 'login_register_link';
   static const String loginShowPassword = 'login_show_password';
   static const String loginHidePassword = 'login_hide_password';
+  static const String validationRequired = 'validation_required';
+  static const String validationEmailInvalid = 'validation_email_invalid';
+  static const String validationPasswordTooShort =
+      'validation_password_too_short';
+  static const String validationPasswordTooLong =
+      'validation_password_too_long';
+  static const String errorDialogTitle = 'error_dialog_title';
+  static const String errorDialogAction = 'error_dialog_action';
 }
