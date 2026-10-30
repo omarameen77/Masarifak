@@ -31,6 +31,16 @@ void main() {
     },
   };
 
+  for (final location in [AppRoutes.register, AppRoutes.forgotPassword]) {
+    test('SessionSignedOut stays at $location', () {
+      expect(sessionRedirect(const SessionSignedOut(), location), isNull);
+    });
+
+    test('SessionSignedIn at $location redirects to home', () {
+      expect(sessionRedirect(signedIn, location), AppRoutes.home);
+    });
+  }
+
   for (final MapEntry(key: state, value: targets) in expected.entries) {
     for (final location in locations) {
       test('${state.runtimeType} at $location redirects to ${targets[location]}', () {

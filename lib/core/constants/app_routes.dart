@@ -5,4 +5,5 @@ abstract final class AppRoutes {
   static const String register = '/register';
   static const String forgotPassword = '/forgot-password';
   static const String initialLocation = login;
+  static const Set<String> signedOutRoutes = {login, register, forgotPassword};
 }

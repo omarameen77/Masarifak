@@ -8,9 +8,13 @@ import '../../core/di/injection.dart';
 import '../../core/router/stream_listenable.dart';
 import '../../features/auth/presentation/login/login_cubit.dart';
 import '../../features/auth/presentation/login/login_screen.dart';
+import '../../features/auth/presentation/register/register_cubit.dart';
+import '../../features/auth/presentation/register/register_screen.dart';
 import '../../features/auth/presentation/session/session_cubit.dart';
 import '../placeholder_screen.dart';
+import 'fade_transition_page.dart';
 import 'session_redirect.dart';
+import 'slide_transition_page.dart';
 
 GoRouter createAppRouter({
   SessionCubit? sessionCubit,
@@ -24,21 +28,45 @@ GoRouter createAppRouter({
     routes: [
       GoRoute(
         path: AppRoutes.login,
-        builder: (_, _) => BlocProvider<LoginCubit>(
-          create: (_) => getIt<LoginCubit>(),
-          child: const LoginScreen(),
+        pageBuilder: (_, state) => SlideTransitionPage(
+          key: state.pageKey,
+          child: BlocProvider<LoginCubit>(
+            create: (_) => getIt<LoginCubit>(),
+            child: const LoginScreen(),
+          ),
+        ),
+      ),
+      GoRoute(
+        path: AppRoutes.register,
+        pageBuilder: (_, state) => SlideTransitionPage(
+          key: state.pageKey,
+          child: BlocProvider<RegisterCubit>(
+            create: (_) => getIt<RegisterCubit>(),
+            child: const RegisterScreen(),
+          ),
+        ),
+      ),
+      GoRoute(
+        path: AppRoutes.forgotPassword,
+        builder: (_, _) => const PlaceholderScreen(
+          titleKey: TranslationKeys.loginForgotPassword,
         ),
       ),
       GoRoute(
         path: AppRoutes.onboarding,
-        builder: (_, _) =>
-            const PlaceholderScreen(titleKey: TranslationKeys.onboardingTitle),
+        pageBuilder: (_, state) => fadeTransitionPage(
+          state,
+          const PlaceholderScreen(titleKey: TranslationKeys.onboardingTitle),
+        ),
       ),
       GoRoute(
         path: AppRoutes.home,
-        builder: (_, _) => const PlaceholderScreen(
-          titleKey: TranslationKeys.homeTitle,
-          showHomeActions: true,
+        pageBuilder: (_, state) => fadeTransitionPage(
+          state,
+          const PlaceholderScreen(
+            titleKey: TranslationKeys.homeTitle,
+            showHomeActions: true,
+          ),
         ),
       ),
     ],

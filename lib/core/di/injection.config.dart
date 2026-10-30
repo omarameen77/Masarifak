@@ -27,6 +27,7 @@ import '../../features/auth/domain/usecases/register_usecase.dart' as _i941;
 import '../../features/auth/domain/usecases/restore_account_usecase.dart'
     as _i272;
 import '../../features/auth/presentation/login/login_cubit.dart' as _i644;
+import '../../features/auth/presentation/register/register_cubit.dart' as _i837;
 import '../../features/auth/presentation/session/profile_onboarded_loader.dart'
     as _i330;
 import '../../features/auth/presentation/session/session_cubit.dart' as _i371;
@@ -125,6 +126,9 @@ extension GetItInjectableX on _i174.GetIt {
         sessionExpiryNotifier: gh<_i838.SessionExpiryNotifier>(),
       ),
       dispose: (i) => i.close(),
+    );
+    gh.factory<_i837.RegisterCubit>(
+      () => _i837.RegisterCubit(gh<_i941.RegisterUseCase>()),
     );
     gh.factory<_i644.LoginCubit>(
       () => _i644.LoginCubit(gh<_i188.LoginUseCase>()),

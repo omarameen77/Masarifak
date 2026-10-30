@@ -1,6 +1,5 @@
 abstract final class TranslationKeys {
   static const String appName = 'app_name';
-  static const String loginTitle = 'login_title';
   static const String onboardingTitle = 'onboarding_title';
   static const String homeTitle = 'home_title';
   static const String placeholderText = 'placeholder_text';
@@ -31,4 +30,24 @@ abstract final class TranslationKeys {
       'validation_password_too_long';
   static const String errorDialogTitle = 'error_dialog_title';
   static const String errorDialogAction = 'error_dialog_action';
+  static const String registerHeading = 'register_heading';
+  static const String registerSubheading = 'register_subheading';
+  static const String registerNameLabel = 'register_name_label';
+  static const String registerSubmit = 'register_submit';
+  static const String registerHaveAccount = 'register_have_account';
+  static const String validationEmailTaken = 'validation_email_taken';
+  static const String loginEmailHint = 'login_email_hint';
+  static const String loginOr = 'login_or';
+  static const String loginTelegram = 'login_telegram';
+  static const String loginNoAccount = 'login_no_account';
+  static const String registerLoginLink = 'register_login_link';
+  static const String registerNameHint = 'register_name_hint';
+  static const String registerNextStepsNote = 'register_next_steps_note';
+  static const String passwordStrengthHint = 'password_strength_hint';
+  static const String passwordStrengthShort = 'password_strength_short';
+  static const String passwordStrengthWeak = 'password_strength_weak';
+  static const String passwordStrengthFair = 'password_strength_fair';
+  static const String passwordStrengthStrong = 'password_strength_strong';
+  static const String passwordStrengthVeryStrong =
+      'password_strength_very_strong';
 }

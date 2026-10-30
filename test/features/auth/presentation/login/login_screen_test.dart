@@ -51,7 +51,7 @@ Future<void> pumpLoginScreen(
   WidgetTester tester, [
   LoginUseCase? loginUseCase,
 ]) async {
-  final title = find.text(arabic[TranslationKeys.loginTitle] as String);
+  final title = find.text(arabic[TranslationKeys.loginHeading] as String);
   await tester.runAsync(() => tester.pumpWidget(buildScreen(loginUseCase)));
   for (var i = 0; i < _maxLoadAttempts && title.evaluate().isEmpty; i++) {
     await tester.runAsync(() => Future<void>.delayed(_loadPollInterval));
@@ -207,11 +207,31 @@ void main() {
     expect(find.byType(AlertDialog), findsNothing);
   });
 
-  testWidgets('screen has no Telegram text', (tester) async {
+  testWidgets('Telegram button is shown and does nothing when tapped', (tester) async {
+    final loginUseCase = mockLoginUseCaseReturning401();
+    await pumpLoginScreen(tester, loginUseCase);
+
+    final telegram = find.text(arabicText(TranslationKeys.loginTelegram));
+    expect(telegram, findsOneWidget);
+
+    await tester.ensureVisible(telegram);
+    await tester.tap(telegram);
+    await tester.pumpAndSettle();
+
+    expect(find.byType(LoginScreen), findsOneWidget);
+    expect(find.byType(AlertDialog), findsNothing);
+    verifyNever(
+      () => loginUseCase(
+        email: any(named: 'email'),
+        password: any(named: 'password'),
+      ),
+    );
+  });
+
+  testWidgets('screen shows no demo account entry', (tester) async {
     await pumpLoginScreen(tester);
 
-    expect(find.textContaining('Telegram'), findsNothing);
-    expect(find.textContaining('تيليجرام'), findsNothing);
+    expect(find.textContaining('تجريبي'), findsNothing);
   });
 
   testWidgets('screen renders without overflow at 360x640', (tester) async {

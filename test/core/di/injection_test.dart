@@ -4,6 +4,7 @@ import 'package:masarifak/core/di/injection.dart';
 import 'package:masarifak/features/auth/domain/repositories/auth_repository.dart';
 import 'package:masarifak/features/auth/domain/usecases/login_usecase.dart';
 import 'package:masarifak/features/auth/presentation/login/login_cubit.dart';
+import 'package:masarifak/features/auth/presentation/register/register_cubit.dart';
 import 'package:masarifak/features/auth/presentation/session/session_cubit.dart';
 
 void main() {
@@ -24,5 +25,10 @@ void main() {
 
   test('LoginCubit is a new instance per resolve', () {
     expect(identical(getIt<LoginCubit>(), getIt<LoginCubit>()), isFalse);
+  });
+
+  test('RegisterCubit resolves as a new instance per resolve', () {
+    expect(getIt<RegisterCubit>(), isA<RegisterCubit>());
+    expect(identical(getIt<RegisterCubit>(), getIt<RegisterCubit>()), isFalse);
   });
 }

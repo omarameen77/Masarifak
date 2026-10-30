@@ -18,6 +18,8 @@ class AppTextField extends StatelessWidget {
     this.onFieldSubmitted,
     this.enabled = true,
     this.autovalidateMode = AutovalidateMode.disabled,
+    this.serverErrorKey,
+    this.hintKey,
   });
 
   final TextEditingController controller;
@@ -32,6 +34,8 @@ class AppTextField extends StatelessWidget {
   final ValueChanged<String>? onFieldSubmitted;
   final bool enabled;
   final AutovalidateMode autovalidateMode;
+  final String? serverErrorKey;
+  final String? hintKey;
 
   String? _validate(String? value) => validator?.call(value)?.tr();
 
@@ -67,7 +71,11 @@ class AppTextField extends StatelessWidget {
           textInputAction: textInputAction,
           onFieldSubmitted: onFieldSubmitted,
           style: theme.textTheme.bodyMedium,
-          decoration: InputDecoration(suffixIcon: suffixIcon),
+          decoration: InputDecoration(
+            suffixIcon: suffixIcon,
+            hintText: hintKey?.tr(),
+            errorText: serverErrorKey?.tr(),
+          ),
         ),
       ],
     );

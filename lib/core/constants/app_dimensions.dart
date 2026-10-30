@@ -30,4 +30,9 @@ abstract final class AppDimensions {
   static const double labelFontSize = 13.5;
   static const double disabledOpacity = 0.45;
   static const double fieldLabelGap = 6;
+  static const double brandMarkSize = 32;
+  static const double brandIconSize = 18;
+  static const double captionFontSize = 13;
+  static const double strengthBarHeight = 4;
+  static const double strengthBarRadius = 2;
 }

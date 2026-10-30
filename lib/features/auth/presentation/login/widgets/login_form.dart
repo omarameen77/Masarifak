@@ -9,6 +9,7 @@ import '../../../../../core/widgets/app_text_field.dart';
 import '../login_cubit.dart';
 import '../login_intent.dart';
 import '../login_state.dart';
+import 'login_forgot_password_link.dart';
 import 'login_password_visibility_button.dart';
 import 'login_submit_button.dart';
 
@@ -80,6 +81,7 @@ class _LoginFormState extends State<LoginForm> {
             AppTextField(
               controller: _email,
               labelKey: TranslationKeys.loginEmailLabel,
+              hintKey: TranslationKeys.loginEmailHint,
               validator: AppValidators.email,
               keyboardType: TextInputType.emailAddress,
               textDirection: TextDirection.ltr,
@@ -104,7 +106,9 @@ class _LoginFormState extends State<LoginForm> {
               enabled: !state.isSubmitting,
               autovalidateMode: _autovalidateMode,
             ),
-            const SizedBox(height: AppDimensions.lg),
+            const SizedBox(height: AppDimensions.xs),
+            const LoginForgotPasswordLink(),
+            const SizedBox(height: AppDimensions.md),
             LoginSubmitButton(
               isSubmitting: state.isSubmitting,
               hasInput: _hasInput,

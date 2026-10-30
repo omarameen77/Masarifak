@@ -67,7 +67,7 @@ void main() {
     await loadAndPumpUntilFound(
       tester,
       () => tester.pumpWidget(buildApp()),
-      find.text(arabic[TranslationKeys.loginTitle] as String),
+      find.text(arabic[TranslationKeys.loginHeading] as String),
     );
 
     expect(directionOf(tester, LoginScreen), TextDirection.rtl);

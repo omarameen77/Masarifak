@@ -1,6 +1,5 @@
 # Open items
 
-- Remove temporary language toggle on Home before release (`lib/app/placeholder_screen.dart`)
 - Tablet layout: prototype caps content width at 440px, not applied in pilot (`lib/core/theme/app_theme.dart`)
 - Focus ring: 3px glow from prototype not implemented, using accent border only (`lib/core/theme/app_theme.dart`)
 - Backend: refresh token endpoint, step 5 / backend-refresh. Undocumented, blocked; `AuthInterceptor` only clears tokens on 401 and does not refresh (`lib/core/network/auth_interceptor.dart`)
@@ -15,7 +14,6 @@
 - Duplicate profile call: `SessionCubit.onSignedIn` also calls `GET /profile`; once the use cases return `onboarded`, the cubit should accept `LoginResult` instead of fetching again (`lib/features/auth/presentation/session/session_cubit.dart`, Step 7)
 - Platform: error mapper and auth interceptor use `dart:io` `HttpStatus`, so these files are not web-compatible (mobile-only pilot)
 - Backend: `POST /logout` and `DELETE /push-tokens`, undocumented request/response (Step 11)
-- Backend: confirm locale `en` and digits `latin` (Step 6)
 - Backend: confirm `X-Platform: android` and `Accept-Language: en` (Step 4)
 - Backend: `restore_token` location in 403 body (Step 6)
 - Backend: reset deep link format (Step 9)
@@ -27,10 +25,12 @@
 - Account: `AuthUser.email` is null after login/register/restore/reset because those responses have no `email` (§8.2); fill it from `GET /me` in the Account feature (`lib/features/auth/domain/entities/auth_user.dart`)
 - Generated code: `*.g.dart` files (json_serializable, retrofit) are committed and must be regenerated after any model or API change with `dart run build_runner build` (`--delete-conflicting-outputs` is not valid for this build_runner version) (`lib/**/*.g.dart`)
 - CI: once CI exists, check that generated `*.g.dart` files are up to date (run `dart run build_runner build` and fail on a non-empty `git diff`)
-- Routing: `AppRoutes.register` and `AppRoutes.forgotPassword` are not registered in `createAppRouter`; the Login links show go_router's error page until Steps 8/9 add those routes (`lib/app/router/app_router.dart`)
-- Wiring: a successful `LoginState.outcome` is not handed to `SessionCubit` yet, so there is no navigation after login (`lib/features/auth/presentation/login/login_screen.dart`)
-- Review: Login uses a top bar with `login_title`; the prototype shows the wallet brand mark instead and a `name@example.com` email placeholder, neither added in the pilot (`lib/features/auth/presentation/login/login_screen.dart`)
+- Routing: `/forgot-password` shows a `PlaceholderScreen` (title `login_forgot_password`) until Forgot password is built (`lib/app/router/app_router.dart`)
+- Login: brand mark uses a temporary Material wallet icon until the real logo asset exists (`lib/features/auth/presentation/login/widgets/login_brand.dart`)
+- Login: Telegram button is a visual placeholder with no action; Telegram login is not in scope (`lib/features/auth/presentation/login/widgets/login_telegram_button.dart`)
 - Remove temporary language toggle and logout placeholder from PlaceholderScreen once Home is built (`lib/app/placeholder_screen.dart`)
 - Password confirm field: not in reference, not added
-- Register strength meter: implement only if the prototype defines the rule; otherwise dropped
+- Backend: English locale and digits values (`en`, `latin`) sent on register are unconfirmed (`lib/core/constants/api_locale_values.dart`)
 - Unify `context.tr` and `.tr()` usage across the auth screens (`lib/features/auth/presentation/`, `lib/core/widgets/`)
+- Register: resubmitting the same email after email_taken sends the request again; confirm this is acceptable.
+- Errors: an unreachable server (DNS or connection failure) shows the same "no internet" message as a missing connection; distinguish them once the backend is deployed (`lib/core/error/error_mapper.dart`)

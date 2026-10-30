@@ -5,11 +5,13 @@ String? sessionRedirect(SessionState state, String currentLocation) =>
     switch (state) {
       SessionUnknown() => null,
       SessionSignedOut() =>
-        currentLocation == AppRoutes.login ? null : AppRoutes.login,
+        AppRoutes.signedOutRoutes.contains(currentLocation)
+            ? null
+            : AppRoutes.login,
       SessionNeedsOnboarding() =>
         currentLocation == AppRoutes.onboarding ? null : AppRoutes.onboarding,
       SessionSignedIn() =>
-        currentLocation == AppRoutes.login ||
+        AppRoutes.signedOutRoutes.contains(currentLocation) ||
                 currentLocation == AppRoutes.onboarding
             ? AppRoutes.home
             : null,

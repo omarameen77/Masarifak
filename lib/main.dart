@@ -19,8 +19,9 @@ Future<void> main() async {
       supportedLocales: AppLocales.supported,
       path: AppAssets.translationsPath,
       fallbackLocale: AppLocales.fallback,
+      startLocale: AppLocales.arabic,
       useOnlyLangCode: true,
-      saveLocale: false,
+      saveLocale: true,
       child: const MasarifakApp(),
     ),
   );

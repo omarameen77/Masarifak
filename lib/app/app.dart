@@ -1,10 +1,13 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import '../core/constants/translation_keys.dart';
+import '../core/di/injection.dart';
 import '../core/theme/app_colors.dart';
 import '../core/theme/app_theme.dart';
+import '../features/auth/presentation/session/session_cubit.dart';
 import 'router/app_router.dart';
 
 class MasarifakApp extends StatefulWidget {
@@ -25,15 +28,18 @@ class _MasarifakAppState extends State<MasarifakApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      debugShowCheckedModeBanner: false,
-      onGenerateTitle: (_) => TranslationKeys.appName.tr(),
-      locale: context.locale,
-      supportedLocales: context.supportedLocales,
-      localizationsDelegates: context.localizationDelegates,
-      routerConfig: _router,
-      theme: AppTheme.build(AppColors.light),
-      themeMode: ThemeMode.light,
+    return BlocProvider<SessionCubit>.value(
+      value: getIt<SessionCubit>(),
+      child: MaterialApp.router(
+        debugShowCheckedModeBanner: false,
+        onGenerateTitle: (_) => TranslationKeys.appName.tr(),
+        locale: context.locale,
+        supportedLocales: context.supportedLocales,
+        localizationsDelegates: context.localizationDelegates,
+        routerConfig: _router,
+        theme: AppTheme.build(AppColors.light),
+        themeMode: ThemeMode.light,
+      ),
     );
   }
 }
