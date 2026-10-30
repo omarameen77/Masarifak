@@ -40,6 +40,13 @@ void main() {
     );
   });
 
+  test('422 carries the onboarding step when present', () {
+    expect(
+      mapDioError(badResponse(422, errorBody({ApiErrorFields.step: 2}))),
+      const ValidationFailure(null, step: 2),
+    );
+  });
+
   test('429 maps to RateLimitFailure', () {
     expect(mapDioError(badResponse(429)), const RateLimitFailure());
   });

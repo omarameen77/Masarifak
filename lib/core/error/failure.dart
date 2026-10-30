@@ -24,12 +24,13 @@ final class RateLimitFailure extends Failure {
 }
 
 final class ValidationFailure extends Failure {
-  const ValidationFailure(this.fields);
+  const ValidationFailure(this.fields, {this.step});
 
   final Map<String, dynamic>? fields;
+  final int? step;
 
   @override
-  List<Object?> get props => [fields];
+  List<Object?> get props => [fields, step];
 }
 
 final class ConflictFailure extends Failure {

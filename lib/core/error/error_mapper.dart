@@ -30,7 +30,7 @@ Failure _mapResponse(DioException error) {
   if (status == HttpStatus.unauthorized) return const UnauthorizedFailure();
   if (status == HttpStatus.conflict) return ConflictFailure(_errorCode(body));
   if (status == HttpStatus.unprocessableEntity) {
-    return ValidationFailure(_errorFields(body));
+    return ValidationFailure(_errorFields(body), step: _errorStep(body));
   }
   if (status == HttpStatus.tooManyRequests) return const RateLimitFailure();
   if (status != null &&
@@ -55,6 +55,11 @@ String? _errorCode(Object? body) {
 Map<String, dynamic>? _errorFields(Object? body) {
   final fields = _errorObject(body)?[ApiErrorFields.fields];
   return fields is Map<String, dynamic> ? fields : null;
+}
+
+int? _errorStep(Object? body) {
+  final step = _errorObject(body)?[ApiErrorFields.step];
+  return step is int ? step : null;
 }
 
 Failure _unknown(DioException error) {

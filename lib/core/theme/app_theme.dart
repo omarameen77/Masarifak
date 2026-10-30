@@ -181,6 +181,14 @@ abstract final class AppTheme {
           color: c.ink2,
         ),
         hintStyle: TextStyle(color: c.muted),
+        helperStyle: TextStyle(
+          color: c.muted,
+          fontSize: AppDimensions.captionFontSize,
+        ),
+        suffixStyle: TextStyle(
+          color: c.muted,
+          fontSize: AppDimensions.unitFontSize,
+        ),
         errorStyle: TextStyle(
           color: c.crit,
           fontSize: AppDimensions.errorFontSize,

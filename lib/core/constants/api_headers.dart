@@ -7,4 +7,5 @@ abstract final class ApiHeaders {
   static const String platform = 'X-Platform';
   static const String deviceId = 'X-Device-Id';
   static const String bearerPrefix = 'Bearer ';
+  static const String idempotencyKey = 'Idempotency-Key';
 }

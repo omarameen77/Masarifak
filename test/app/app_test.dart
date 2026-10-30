@@ -31,6 +31,7 @@ Widget buildApp() => EasyLocalization(
   fallbackLocale: AppLocales.fallback,
   startLocale: AppLocales.arabic,
   useOnlyLangCode: true,
+  ignorePluralRules: false,
   saveLocale: false,
   child: const MasarifakApp(),
 );
