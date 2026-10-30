@@ -12,5 +12,15 @@
   "error_validation": "فيه بيانات مش مظبوطة. راجعها وجرّب تاني.",
   "error_conflict": "مينفعش نكمّل الطلب ده دلوقتي.",
   "error_server": "حصلت مشكلة عندنا. جرّب تاني بعد شوية.",
-  "error_unknown": "حصلت مشكلة. جرّب تاني."
+  "error_unknown": "حصلت مشكلة. جرّب تاني.",
+  "error_invalid_credentials": "الإيميل أو كلمة السر مش مظبوطين",
+  "login_heading": "أهلًا بيك تاني",
+  "login_subheading": "سجّل دخولك عشان تشوف فاضلك كام",
+  "login_submit": "دخول",
+  "login_email_label": "الإيميل",
+  "login_password_label": "كلمة السر",
+  "login_forgot_password": "نسيت كلمة السر؟",
+  "login_register_link": "معندكش حساب؟ اعمل واحد",
+  "login_show_password": "اظهر كلمة السر",
+  "login_hide_password": "اخفي كلمة السر"
 }

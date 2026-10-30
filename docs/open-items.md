@@ -29,3 +29,6 @@
 - Generated code: `*.g.dart` files (json_serializable, retrofit) are committed and must be regenerated after any model or API change with `dart run build_runner build` (`--delete-conflicting-outputs` is not valid for this build_runner version) (`lib/**/*.g.dart`)
 - CI: once CI exists, check that generated `*.g.dart` files are up to date (run `dart run build_runner build` and fail on a non-empty `git diff`)
 - DI: `AuthApi` (auth Dio), `ProfileApi` (API Dio) and `TokenStorage` are not registered yet; `AuthRemoteDataSourceImpl` and `AuthRepositoryImpl` carry `@Injectable` annotations only (Step 7)
+- Routing: `AppRoutes.register` and `AppRoutes.forgotPassword` are not registered in `createAppRouter`; the Login links show go_router's error page until Steps 8/9 add those routes (`lib/app/router/app_router.dart`)
+- Wiring: `LoginScreen` is not on the `/login` route yet, and a successful `LoginState.outcome` is not handed to `SessionCubit` (no navigation after login) until DI is wired (`lib/features/auth/presentation/login/login_screen.dart`)
+- Review: Login uses a top bar with `login_title`; the prototype shows the wallet brand mark instead and a `name@example.com` email placeholder, neither added in the pilot (`lib/features/auth/presentation/login/login_screen.dart`)

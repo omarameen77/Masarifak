@@ -15,7 +15,8 @@ GoRouter createAppRouter({
   refreshListenable: refreshListenable,
   redirect: sessionCubit == null
       ? null
-      : (_, state) => sessionRedirect(sessionCubit.state, state.matchedLocation),
+      : (_, state) =>
+            sessionRedirect(sessionCubit.state, state.matchedLocation),
   routes: [
     GoRoute(
       path: AppRoutes.login,

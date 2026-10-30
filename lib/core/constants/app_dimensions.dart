@@ -24,4 +24,12 @@ abstract final class AppDimensions {
   static const double buttonFontSize = 15;
   static const double errorFontSize = 13;
   static const double bodyLineHeight = 1.55;
+  static const double headingFontSize = 24;
+  static const double headingLineHeight = 1.3;
+  static const double secondaryFontSize = 14;
+  static const double labelFontSize = 13.5;
+  static const double noteIconSize = 19;
+  static const double disabledOpacity = 0.45;
+  static const double fieldLabelGap = 6;
+  static const double noteIconGap = 10;
 }

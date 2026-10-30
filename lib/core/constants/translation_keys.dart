@@ -13,4 +13,14 @@ abstract final class TranslationKeys {
   static const String errorConflict = 'error_conflict';
   static const String errorServer = 'error_server';
   static const String errorUnknown = 'error_unknown';
+  static const String errorInvalidCredentials = 'error_invalid_credentials';
+  static const String loginHeading = 'login_heading';
+  static const String loginSubheading = 'login_subheading';
+  static const String loginSubmit = 'login_submit';
+  static const String loginEmailLabel = 'login_email_label';
+  static const String loginPasswordLabel = 'login_password_label';
+  static const String loginForgotPassword = 'login_forgot_password';
+  static const String loginRegisterLink = 'login_register_link';
+  static const String loginShowPassword = 'login_show_password';
+  static const String loginHidePassword = 'login_hide_password';
 }

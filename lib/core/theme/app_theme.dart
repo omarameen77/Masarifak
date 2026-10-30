@@ -57,6 +57,12 @@ abstract final class AppTheme {
           fontWeight: FontWeight.w600,
           color: c.ink,
         ),
+        headlineSmall: TextStyle(
+          fontSize: AppDimensions.headingFontSize,
+          fontWeight: FontWeight.w600,
+          height: AppDimensions.headingLineHeight,
+          color: c.ink,
+        ),
       ),
       appBarTheme: AppBarTheme(
         backgroundColor: c.bg,
@@ -71,6 +77,38 @@ abstract final class AppTheme {
           fontSize: AppDimensions.titleFontSize,
           fontWeight: FontWeight.w600,
           color: c.ink,
+        ),
+      ),
+      filledButtonTheme: FilledButtonThemeData(
+        style: FilledButton.styleFrom(
+          minimumSize: const Size.fromHeight(AppDimensions.buttonMinHeight),
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppDimensions.buttonPaddingHorizontal,
+          ),
+          shape: controlShape,
+          backgroundColor: c.acc,
+          foregroundColor: c.accInk,
+          disabledBackgroundColor: c.acc.withValues(
+            alpha: AppDimensions.disabledOpacity,
+          ),
+          disabledForegroundColor: c.accInk,
+          textStyle: const TextStyle(
+            fontFamily: AppAssets.fontFamily,
+            fontSize: AppDimensions.buttonFontSize,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ),
+      textButtonTheme: TextButtonThemeData(
+        style: TextButton.styleFrom(
+          minimumSize: const Size(0, AppDimensions.tapSize),
+          padding: const EdgeInsets.symmetric(horizontal: AppDimensions.xs),
+          foregroundColor: c.accText,
+          textStyle: const TextStyle(
+            fontFamily: AppAssets.fontFamily,
+            fontSize: AppDimensions.secondaryFontSize,
+            fontWeight: FontWeight.w600,
+          ),
         ),
       ),
       outlinedButtonTheme: OutlinedButtonThemeData(

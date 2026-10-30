@@ -12,5 +12,15 @@
   "error_validation": "Some details are not valid. Check them and try again.",
   "error_conflict": "This request can't be completed right now.",
   "error_server": "Something went wrong on our side. Try again in a little while.",
-  "error_unknown": "Something went wrong. Try again."
+  "error_unknown": "Something went wrong. Try again.",
+  "error_invalid_credentials": "Email or password is incorrect",
+  "login_heading": "Welcome back",
+  "login_subheading": "Log in to see how much you have left",
+  "login_submit": "Log in",
+  "login_email_label": "Email",
+  "login_password_label": "Password",
+  "login_forgot_password": "Forgot your password?",
+  "login_register_link": "Don't have an account? Create one",
+  "login_show_password": "Show password",
+  "login_hide_password": "Hide password"
 }
