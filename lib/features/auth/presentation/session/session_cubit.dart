@@ -50,6 +50,13 @@ class SessionCubit extends Cubit<SessionState> {
     await _resolveOnboarding(flags);
   }
 
+  void completeOnboarding() => emit(SessionSignedIn(_flags));
+
+  void enterOnboardingWithoutBackend() {
+    _flags = const FeatureFlags.empty();
+    emit(const SessionNeedsOnboarding());
+  }
+
   Future<void> logout() async {
     await _tokenStorage.clear();
     _signedOut();

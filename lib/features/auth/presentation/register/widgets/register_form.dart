@@ -5,8 +5,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../core/constants/api_locale_values.dart';
 import '../../../../../core/constants/app_dimensions.dart';
 import '../../../../../core/constants/app_locales.dart';
+import '../../../../../core/constants/dev_flags.dart';
 import '../../../../../core/constants/translation_keys.dart';
 import '../../../../../core/error/failure.dart';
+import '../../session/session_cubit.dart';
 import '../register_cubit.dart';
 import '../register_failure_message.dart';
 import '../register_intent.dart';
@@ -79,6 +81,10 @@ class _RegisterFormState extends State<RegisterForm> {
     final cubit = context.read<RegisterCubit>();
     cubit.doEvent(const RegisterSubmitAttempted());
     if (!(_formKey.currentState?.validate() ?? false)) return;
+    if (DevFlags.skipAuthApi) {
+      context.read<SessionCubit>().enterOnboardingWithoutBackend();
+      return;
+    }
     final isArabic =
         context.locale.languageCode == AppLocales.arabic.languageCode;
     cubit.doEvent(
