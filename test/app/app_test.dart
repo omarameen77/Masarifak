@@ -6,7 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:masarifak/app/app.dart';
-import 'package:masarifak/app/placeholder_screen.dart';
+import 'package:masarifak/core/time/clock.dart';
+import 'package:masarifak/features/home/data/local_home_repository.dart';
+import 'package:masarifak/features/home/domain/usecases/load_home_usecase.dart';
+import 'package:masarifak/features/home/presentation/home_cubit.dart';
+import 'package:masarifak/features/home/presentation/home_screen.dart';
 import 'package:masarifak/core/constants/app_assets.dart';
 import 'package:masarifak/core/constants/app_locales.dart';
 import 'package:masarifak/core/constants/app_routes.dart';
@@ -60,7 +64,17 @@ void main() {
     english = await readTranslations(AppLocales.english);
   });
 
-  setUp(configureDependencies);
+  setUp(() async {
+    await configureDependencies();
+    getIt
+      ..unregister<HomeCubit>()
+      ..registerFactory<HomeCubit>(
+        () => HomeCubit(
+          LoadHomeUseCase(LocalHomeRepository(Clock())),
+          Clock(),
+        ),
+      );
+  });
 
   tearDown(getIt.reset);
 
@@ -83,24 +97,21 @@ void main() {
 
     GoRouter.of(tester.element(find.byType(LoginScreen))).go(AppRoutes.home);
     await tester.pumpAndSettle();
-    expect(
-      find.descendant(
-        of: find.byType(AppBar),
-        matching: find.text(arabic[TranslationKeys.homeTitle] as String),
-      ),
-      findsOneWidget,
+    expect(find.byType(HomeScreen), findsOneWidget);
+    expect(directionOf(tester, HomeScreen), TextDirection.rtl);
+
+    await tester.tap(
+      find.byTooltip(arabic[TranslationKeys.homeAccount] as String),
     );
+    await tester.pumpAndSettle();
 
     await loadAndPumpUntilFound(
       tester,
       () => tester.tap(find.text(arabic[TranslationKeys.languageToggle] as String)),
-      find.descendant(
-        of: find.byType(AppBar),
-        matching: find.text(english[TranslationKeys.homeTitle] as String),
-      ),
+      find.text(english[TranslationKeys.homeAccount] as String),
     );
 
-    expect(directionOf(tester, PlaceholderScreen), TextDirection.ltr);
+    expect(directionOf(tester, HomeScreen), TextDirection.ltr);
   });
 
   testWidgets('applies the light AppColors theme only', (tester) async {

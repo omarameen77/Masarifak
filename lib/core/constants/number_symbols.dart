@@ -2,6 +2,7 @@ abstract final class NumberSymbols {
   static const int base = 10;
   static const String minus = '−';
   static const String space = ' ';
+  static const String middleDot = '·';
   static const String decimal = '.';
   static const String approx = '~';
   static const String plainPattern = '0';

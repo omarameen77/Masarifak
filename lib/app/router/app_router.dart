@@ -13,6 +13,9 @@ import '../../features/auth/presentation/register/register_screen.dart';
 import '../../features/auth/presentation/session/session_cubit.dart';
 import '../../features/onboarding/presentation/onboarding_cubit.dart';
 import '../../features/onboarding/presentation/onboarding_intent.dart';
+import '../../features/home/presentation/home_cubit.dart';
+import '../../features/home/presentation/home_intent.dart';
+import '../../features/home/presentation/home_screen.dart';
 import '../../features/main_layout/presentation/main_layout_cubit.dart';
 import '../../features/main_layout/presentation/main_layout_screen.dart';
 import '../../features/main_layout/presentation/main_tab.dart';
@@ -130,9 +133,9 @@ GoRouter createAppRouter({
 }
 
 Widget _tabRoot(MainTab tab) => switch (tab) {
-  MainTab.home => const PlaceholderScreen(
-    titleKey: TranslationKeys.homeTitle,
-    showHomeActions: true,
+  MainTab.home => BlocProvider<HomeCubit>(
+    create: (_) => getIt<HomeCubit>()..doEvent(const HomeStarted()),
+    child: const HomeScreen(),
   ),
   MainTab.expenses => const PlaceholderScreen(
     titleKey: TranslationKeys.expensesTitle,

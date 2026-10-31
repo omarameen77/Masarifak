@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:easy_localization/easy_localization.dart';
 
+import '../constants/app_args.dart';
 import '../constants/onboarding_args.dart';
 import '../constants/translation_keys.dart';
 import 'app_number_format.dart';
@@ -33,6 +34,16 @@ class AppDateFormat {
       OnboardingArgs.end: dayMonth(end),
     },
   );
+
+  String weekday(DateTime date) =>
+      TranslationKeys.weekdays[date.weekday - 1].tr();
+
+  String weekdayDayMonth(DateTime date) => TranslationKeys.dateWeekdayDayMonth.tr(
+    namedArgs: {AppArgs.weekday: weekday(date), AppArgs.date: dayMonth(date)},
+  );
+
+  String cycleLabel(DateTime start, DateTime end) =>
+      start.day == 1 ? monthYear(start) : range(start, end);
 
   String days(int count) =>
       TranslationKeys.daysCount.plural(count, args: [_numbers.integer(count)]);

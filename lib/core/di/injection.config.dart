@@ -31,6 +31,14 @@ import '../../features/auth/presentation/register/register_cubit.dart' as _i837;
 import '../../features/auth/presentation/session/profile_onboarded_loader.dart'
     as _i330;
 import '../../features/auth/presentation/session/session_cubit.dart' as _i371;
+import '../../features/home/data/home_api.dart' as _i773;
+import '../../features/home/data/home_remote_data_source.dart' as _i286;
+import '../../features/home/data/home_repository_impl.dart' as _i939;
+import '../../features/home/data/local_home_repository.dart' as _i239;
+import '../../features/home/di/home_module.dart' as _i704;
+import '../../features/home/domain/repositories/home_repository.dart' as _i0;
+import '../../features/home/domain/usecases/load_home_usecase.dart' as _i261;
+import '../../features/home/presentation/home_cubit.dart' as _i982;
 import '../../features/main_layout/presentation/main_layout_cubit.dart' as _i43;
 import '../../features/onboarding/data/local_onboarding_repository.dart'
     as _i742;
@@ -69,6 +77,7 @@ extension GetItInjectableX on _i174.GetIt {
     final gh = _i526.GetItHelper(this, environment, environmentFilter);
     final networkModule = _$NetworkModule();
     final authModule = _$AuthModule();
+    final homeModule = _$HomeModule();
     final onboardingModule = _$OnboardingModule();
     gh.factory<_i43.MainLayoutCubit>(() => _i43.MainLayoutCubit());
     gh.singleton<_i558.FlutterSecureStorage>(() => networkModule.storage());
@@ -83,6 +92,9 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.singleton<_i973.TokenStorage>(
       () => _i973.TokenStorage(gh<_i558.FlutterSecureStorage>()),
+    );
+    gh.factory<_i239.LocalHomeRepository>(
+      () => _i239.LocalHomeRepository(gh<_i807.Clock>()),
     );
     gh.factory<_i742.LocalOnboardingRepository>(
       () => _i742.LocalOnboardingRepository(gh<_i807.Clock>()),
@@ -112,6 +124,9 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i86.ProfileApi>(
       () => _i86.ProfileApi(gh<_i361.Dio>(instanceName: 'api')),
     );
+    gh.lazySingleton<_i773.HomeApi>(
+      () => _i773.HomeApi(gh<_i361.Dio>(instanceName: 'api')),
+    );
     gh.lazySingleton<_i735.OnboardingApi>(
       () => _i735.OnboardingApi(gh<_i361.Dio>(instanceName: 'api')),
     );
@@ -121,6 +136,12 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.lazySingleton<_i936.AuthApi>(
       () => _i936.AuthApi(gh<_i361.Dio>(instanceName: 'auth')),
+    );
+    gh.factory<_i286.HomeRemoteDataSource>(
+      () => _i286.HomeRemoteDataSourceImpl(gh<_i773.HomeApi>()),
+    );
+    gh.factory<_i939.HomeRepositoryImpl>(
+      () => _i939.HomeRepositoryImpl(gh<_i286.HomeRemoteDataSource>()),
     );
     gh.factory<_i767.AuthRemoteDataSource>(
       () => _i767.AuthRemoteDataSourceImpl(
@@ -157,6 +178,15 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i349.OnboardingRemoteDataSource>(),
       ),
     );
+    gh.factory<_i0.HomeRepository>(
+      () => homeModule.repository(
+        gh<_i939.HomeRepositoryImpl>(),
+        gh<_i239.LocalHomeRepository>(),
+      ),
+    );
+    gh.factory<_i261.LoadHomeUseCase>(
+      () => _i261.LoadHomeUseCase(gh<_i0.HomeRepository>()),
+    );
     gh.singleton<_i371.SessionCubit>(
       () => _i371.SessionCubit(
         tokenStorage: gh<_i973.TokenStorage>(),
@@ -186,6 +216,9 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i1036.PreviewOnboardingUseCase>(
       () => _i1036.PreviewOnboardingUseCase(gh<_i430.OnboardingRepository>()),
     );
+    gh.factory<_i982.HomeCubit>(
+      () => _i982.HomeCubit(gh<_i261.LoadHomeUseCase>(), gh<_i807.Clock>()),
+    );
     gh.factory<_i161.OnboardingCubit>(
       () => _i161.OnboardingCubit(
         gh<_i305.GetCurrenciesUseCase>(),
@@ -202,5 +235,7 @@ extension GetItInjectableX on _i174.GetIt {
 class _$NetworkModule extends _i567.NetworkModule {}
 
 class _$AuthModule extends _i433.AuthModule {}
+
+class _$HomeModule extends _i704.HomeModule {}
 
 class _$OnboardingModule extends _i568.OnboardingModule {}
