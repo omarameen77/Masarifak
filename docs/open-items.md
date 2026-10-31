@@ -28,7 +28,7 @@
 - Routing: `/forgot-password` shows a `PlaceholderScreen` (title `login_forgot_password`) until Forgot password is built (`lib/app/router/app_router.dart`)
 - Login: brand mark uses a temporary Material wallet icon until the real logo asset exists (`lib/features/auth/presentation/login/widgets/login_brand.dart`)
 - Login: Telegram button is a visual placeholder with no action; Telegram login is not in scope (`lib/features/auth/presentation/login/widgets/login_telegram_button.dart`)
-- Remove temporary language toggle and logout placeholder from PlaceholderScreen once Home is built (`lib/app/placeholder_screen.dart`)
+- The language toggle and logout now live in a temporary account sheet opened from the home avatar; replace it with the account and settings screens (`lib/features/home/presentation/widgets/home_account_sheet.dart`)
 - Password confirm field: not in reference, not added
 - Backend: English locale and digits values (`en`, `latin`) sent on register are unconfirmed (`lib/core/constants/api_locale_values.dart`)
 - Unify `context.tr` and `.tr()` usage across the auth screens (`lib/features/auth/presentation/`, `lib/core/widgets/`)
@@ -49,3 +49,10 @@
 - Onboarding: days left and next payday on step 4 are computed on the device from the payday, because the documented summary does not include them (`lib/features/onboarding/presentation/summary/widgets/summary_body.dart`)
 - Ask tab: the prototype shows free text, fixed suggestion chips, a saved chat and «٥٠ كشري»-style expense entry; the API (§8.15) has no free text, builds its nine questions from `GET /ask/types`, answers with `POST /ask` blocks, and keeps no history. The tab stays visible; the screen will show an unavailable state when the list is empty (`lib/features/main_layout/presentation/main_tab.dart`)
 - Main layout: the expenses tab FAB («مصروف») from the prototype is not added yet; it belongs to the expenses tab step
+- Home: the summary (§7.10) is assumed to carry `cycle: {start, end, days}`, `safety_balance_minor` and `margin_minor`; they are optional in the DTO and the parts that need them hide when missing (`lib/features/home/data/models/cycle_summary_dto.dart`)
+- Home: `days[]` and the `pending_review_cycle` shape are undocumented; the ruler is drawn from the cycle dates, today and `floor_date`, and the review card only checks that `pending_review_cycle` is not null
+- Home: `GET /obligations?view=upcoming` response shape is undocumented; it is parsed like `GET /obligations` (`sections[].items[]`) and sorted by due date (`lib/features/home/data/models/obligations_page_dto.dart`)
+- Home: spent today is not in the summary, so «تقدر تصرف النهاردة» shows the daily allowance only; the name and email-verified state are not returned after a restart, so the avatar is an icon and the verify-email banner is not shown
+- Home: «سجّل مصروف», «صوّر فاتورة», the bell, the report icon, «إزاي اتحسب؟», the review card and the savings row have no destination yet; the «٥٠ كشري» quick entry from the prototype is not added
+- Home: the local repository serves fixed sample data in debug builds (`lib/features/home/data/local_home_fixtures.dart`); remove it with the dev flag
+- Home tests deferred: DTO parsing tests (wait for the real §7.10, `view=upcoming` and pockets shapes) and widget tests per section (wait until the home actions have destinations); `HomeCubit` and navigation are covered (`test/features/home/`)

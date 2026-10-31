@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
-import 'package:masarifak/app/placeholder_screen.dart';
 import 'package:masarifak/app/router/app_router.dart';
 import 'package:masarifak/core/constants/app_durations.dart';
 import 'package:masarifak/core/constants/app_motion.dart';
@@ -29,6 +28,10 @@ import 'package:masarifak/features/auth/presentation/session/session_cubit.dart'
 import 'package:masarifak/features/auth/presentation/session/session_state.dart';
 import 'package:masarifak/core/id/id_generator.dart';
 import 'package:masarifak/core/widgets/app_bottom_tab_bar.dart';
+import 'package:masarifak/features/home/data/local_home_repository.dart';
+import 'package:masarifak/features/home/domain/usecases/load_home_usecase.dart';
+import 'package:masarifak/features/home/presentation/home_cubit.dart';
+import 'package:masarifak/features/home/presentation/home_screen.dart';
 import 'package:masarifak/features/main_layout/presentation/main_layout_cubit.dart';
 import 'package:masarifak/features/main_layout/presentation/main_layout_screen.dart';
 import 'package:masarifak/features/main_layout/presentation/main_tab.dart';
@@ -135,6 +138,12 @@ void main() {
 
   setUp(() {
     getIt.registerFactory<MainLayoutCubit>(MainLayoutCubit.new);
+    getIt.registerFactory<HomeCubit>(
+      () => HomeCubit(
+        LoadHomeUseCase(LocalHomeRepository(Clock())),
+        Clock(),
+      ),
+    );
     final localRepository = LocalOnboardingRepository(Clock());
     getIt.registerFactory<OnboardingCubit>(
       () => OnboardingCubit(
@@ -393,7 +402,7 @@ void main() {
 
     final fades = tester.widgetList<FadeTransition>(
       find.ancestor(
-        of: find.byType(PlaceholderScreen),
+        of: find.byType(HomeScreen),
         matching: find.byType(FadeTransition),
       ),
     );
@@ -403,7 +412,7 @@ void main() {
     );
 
     await tester.pumpAndSettle();
-    expect(find.byType(PlaceholderScreen), findsOneWidget);
+    expect(find.byType(HomeScreen), findsOneWidget);
   });
 
   testWidgets('register link opens register and back returns to login', (
