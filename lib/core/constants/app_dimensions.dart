@@ -74,4 +74,9 @@ abstract final class AppDimensions {
   static const double kpiCaptionFontSize = 12.5;
   static const double progressIndicatorSize = 20;
   static const double progressStrokeWidth = 2;
+  static const double tabBarPadding = 4;
+  static const double tabMinHeight = 52;
+  static const double tabIconSize = 24;
+  static const double tabIconLabelGap = 2;
+  static const double tabLabelFontSize = 12;
 }

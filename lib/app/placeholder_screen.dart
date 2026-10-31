@@ -18,13 +18,13 @@ class PlaceholderScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(titleKey.tr())),
+      appBar: AppBar(title: Text(context.tr(titleKey))),
       body: Padding(
         padding: const EdgeInsets.all(AppDimensions.pageGutter),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Text(TranslationKeys.placeholderText.tr()),
+            Text(context.tr(TranslationKeys.placeholderText)),
             if (showHomeActions) ...[
               const SizedBox(height: AppDimensions.lg),
               Row(
@@ -36,7 +36,7 @@ class PlaceholderScreen extends StatelessWidget {
                             ? AppLocales.english
                             : AppLocales.arabic,
                       ),
-                      child: Text(TranslationKeys.languageToggle.tr()),
+                      child: Text(context.tr(TranslationKeys.languageToggle)),
                     ),
                   ),
                   const SizedBox(width: AppDimensions.sm),

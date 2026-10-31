@@ -28,6 +28,10 @@ import 'package:masarifak/features/auth/presentation/register/register_screen.da
 import 'package:masarifak/features/auth/presentation/session/session_cubit.dart';
 import 'package:masarifak/features/auth/presentation/session/session_state.dart';
 import 'package:masarifak/core/id/id_generator.dart';
+import 'package:masarifak/core/widgets/app_bottom_tab_bar.dart';
+import 'package:masarifak/features/main_layout/presentation/main_layout_cubit.dart';
+import 'package:masarifak/features/main_layout/presentation/main_layout_screen.dart';
+import 'package:masarifak/features/main_layout/presentation/main_tab.dart';
 import 'package:masarifak/core/time/clock.dart';
 import 'package:masarifak/features/onboarding/data/local_onboarding_repository.dart';
 import 'package:masarifak/features/onboarding/domain/usecases/complete_onboarding_usecase.dart';
@@ -130,6 +134,7 @@ void main() {
   });
 
   setUp(() {
+    getIt.registerFactory<MainLayoutCubit>(MainLayoutCubit.new);
     final localRepository = LocalOnboardingRepository(Clock());
     getIt.registerFactory<OnboardingCubit>(
       () => OnboardingCubit(
@@ -291,6 +296,88 @@ void main() {
     await tester.pumpAndSettle();
     expect(currentPath(router), AppRoutes.onboardingIncome);
     expect(find.byIcon(Icons.arrow_back), findsNothing);
+  });
+
+  group('main layout', () {
+    const signedIn = SessionSignedIn(FeatureFlags.empty());
+
+    Future<GoRouter> pumpSignedIn(WidgetTester tester) => pumpApp(
+      tester,
+      initialState: signedIn,
+      until: find.byType(MainLayoutScreen),
+    );
+
+    Finder tab(String key) => find.descendant(
+      of: find.byType(AppBottomTabBar),
+      matching: find.text(arabicText(key)),
+    );
+
+    Finder appBarTitle(String key) => find.descendant(
+      of: find.byType(AppBar),
+      matching: find.text(arabicText(key)),
+    );
+
+    testWidgets('signed in lands on home with four tabs', (tester) async {
+      final router = await pumpSignedIn(tester);
+
+      expect(currentPath(router), AppRoutes.home);
+      for (final key in [
+        TranslationKeys.tabHome,
+        TranslationKeys.tabExpenses,
+        TranslationKeys.tabObligations,
+        TranslationKeys.tabAsk,
+      ]) {
+        expect(tab(key), findsOneWidget);
+      }
+    });
+
+    testWidgets('tapping a tab switches the branch and the selection', (tester) async {
+      final router = await pumpSignedIn(tester);
+
+      await tester.tap(tab(TranslationKeys.tabObligations));
+      await tester.pumpAndSettle();
+
+      expect(currentPath(router), AppRoutes.obligations);
+      expect(appBarTitle(TranslationKeys.obligationsTitle), findsOneWidget);
+      expect(
+        BlocProvider.of<MainLayoutCubit>(
+          tester.element(find.byType(MainLayoutScreen)),
+        ).state.currentTab,
+        MainTab.obligations,
+      );
+
+      await tester.tap(tab(TranslationKeys.tabHome));
+      await tester.pumpAndSettle();
+      expect(currentPath(router), AppRoutes.home);
+    });
+
+    testWidgets('a direct route change selects the matching tab', (tester) async {
+      final router = await pumpSignedIn(tester);
+
+      router.go(AppRoutes.ask);
+      await tester.pumpAndSettle();
+
+      expect(appBarTitle(TranslationKeys.askTitle), findsOneWidget);
+      expect(
+        BlocProvider.of<MainLayoutCubit>(
+          tester.element(find.byType(MainLayoutScreen)),
+        ).state.currentTab,
+        MainTab.ask,
+      );
+    });
+
+    testWidgets('system back on another tab returns to home first', (tester) async {
+      final router = await pumpSignedIn(tester);
+      await tester.tap(tab(TranslationKeys.tabExpenses));
+      await tester.pumpAndSettle();
+      expect(currentPath(router), AppRoutes.expenses);
+
+      await tester.binding.handlePopRoute();
+      await tester.pumpAndSettle();
+
+      expect(currentPath(router), AppRoutes.home);
+      expect(find.byType(MainLayoutScreen), findsOneWidget);
+    });
   });
 
   testWidgets('home is shown with a fade transition', (tester) async {

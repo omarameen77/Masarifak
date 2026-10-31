@@ -148,5 +148,13 @@
   "summary_formula": "المسموح يوميًا = (المتاح للصرف − الحد الأدنى − اللي اتصرف) ÷ الأيام الباقية.",
   "summary_start": "ابدأ",
   "summary_link_telegram": "اربط تيليجرام",
-  "common_retry": "جرّب تاني"
+  "common_retry": "جرّب تاني",
+  "tab_home": "الرئيسية",
+  "tab_expenses": "المصاريف",
+  "tab_obligations": "الالتزامات",
+  "tab_ask": "اسأل",
+  "main_navigation_label": "التنقل الرئيسي",
+  "expenses_title": "المصاريف",
+  "obligations_title": "الالتزامات",
+  "ask_title": "اسأل عن فلوسك"
 }

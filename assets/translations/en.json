@@ -144,5 +144,13 @@
   "summary_formula": "Daily allowance = (available to spend − minimum − spent) ÷ days left.",
   "summary_start": "Start",
   "summary_link_telegram": "Link Telegram",
-  "common_retry": "Try again"
+  "common_retry": "Try again",
+  "tab_home": "Home",
+  "tab_expenses": "Expenses",
+  "tab_obligations": "Commitments",
+  "tab_ask": "Ask",
+  "main_navigation_label": "Main navigation",
+  "expenses_title": "Expenses",
+  "obligations_title": "Commitments",
+  "ask_title": "Ask about your money"
 }

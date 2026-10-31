@@ -31,6 +31,7 @@ import '../../features/auth/presentation/register/register_cubit.dart' as _i837;
 import '../../features/auth/presentation/session/profile_onboarded_loader.dart'
     as _i330;
 import '../../features/auth/presentation/session/session_cubit.dart' as _i371;
+import '../../features/main_layout/presentation/main_layout_cubit.dart' as _i43;
 import '../../features/onboarding/data/local_onboarding_repository.dart'
     as _i742;
 import '../../features/onboarding/data/onboarding_api.dart' as _i735;
@@ -69,6 +70,7 @@ extension GetItInjectableX on _i174.GetIt {
     final networkModule = _$NetworkModule();
     final authModule = _$AuthModule();
     final onboardingModule = _$OnboardingModule();
+    gh.factory<_i43.MainLayoutCubit>(() => _i43.MainLayoutCubit());
     gh.singleton<_i558.FlutterSecureStorage>(() => networkModule.storage());
     gh.singleton<_i838.SessionExpiryNotifier>(
       () => _i838.SessionExpiryNotifier(),

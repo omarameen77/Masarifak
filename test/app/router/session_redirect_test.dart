@@ -41,6 +41,27 @@ void main() {
     });
   }
 
+  for (final tab in [
+    AppRoutes.expenses,
+    AppRoutes.obligations,
+    AppRoutes.ask,
+  ]) {
+    test('SessionSignedIn stays on $tab', () {
+      expect(sessionRedirect(signedIn, tab), isNull);
+    });
+
+    test('SessionSignedOut on $tab redirects to login', () {
+      expect(sessionRedirect(const SessionSignedOut(), tab), AppRoutes.login);
+    });
+
+    test('SessionNeedsOnboarding on $tab redirects to onboarding', () {
+      expect(
+        sessionRedirect(const SessionNeedsOnboarding(), tab),
+        AppRoutes.onboarding,
+      );
+    });
+  }
+
   for (final step in AppRoutes.onboardingSteps) {
     test('SessionNeedsOnboarding stays on $step', () {
       expect(sessionRedirect(const SessionNeedsOnboarding(), step), isNull);

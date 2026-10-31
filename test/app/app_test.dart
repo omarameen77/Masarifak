@@ -83,12 +83,21 @@ void main() {
 
     GoRouter.of(tester.element(find.byType(LoginScreen))).go(AppRoutes.home);
     await tester.pumpAndSettle();
-    expect(find.text(arabic[TranslationKeys.homeTitle] as String), findsOneWidget);
+    expect(
+      find.descendant(
+        of: find.byType(AppBar),
+        matching: find.text(arabic[TranslationKeys.homeTitle] as String),
+      ),
+      findsOneWidget,
+    );
 
     await loadAndPumpUntilFound(
       tester,
       () => tester.tap(find.text(arabic[TranslationKeys.languageToggle] as String)),
-      find.text(english[TranslationKeys.homeTitle] as String),
+      find.descendant(
+        of: find.byType(AppBar),
+        matching: find.text(english[TranslationKeys.homeTitle] as String),
+      ),
     );
 
     expect(directionOf(tester, PlaceholderScreen), TextDirection.ltr);
