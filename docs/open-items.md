@@ -47,3 +47,5 @@
 - Onboarding: `warnings` from the preview and save responses (for example `installment_high:c-3`) are kept but not shown; the prototype has no design for them (`lib/features/onboarding/presentation/summary/onboarding_summary_screen.dart`)
 - Onboarding: «اربط تيليجرام» on step 4 is a visual placeholder with no action (`lib/features/onboarding/presentation/summary/widgets/summary_actions.dart`)
 - Onboarding: days left and next payday on step 4 are computed on the device from the payday, because the documented summary does not include them (`lib/features/onboarding/presentation/summary/widgets/summary_body.dart`)
+- Ask tab: the prototype shows free text, fixed suggestion chips, a saved chat and «٥٠ كشري»-style expense entry; the API (§8.15) has no free text, builds its nine questions from `GET /ask/types`, answers with `POST /ask` blocks, and keeps no history. The tab stays visible; the screen will show an unavailable state when the list is empty (`lib/features/main_layout/presentation/main_tab.dart`)
+- Main layout: the expenses tab FAB («مصروف») from the prototype is not added yet; it belongs to the expenses tab step

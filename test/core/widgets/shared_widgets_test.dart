@@ -3,6 +3,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:masarifak/core/constants/translation_keys.dart';
 import 'package:masarifak/core/theme/app_colors.dart';
 import 'package:masarifak/core/widgets/app_bottom_sheet.dart';
+import 'package:masarifak/core/widgets/app_bottom_tab_bar.dart';
+import 'package:masarifak/core/widgets/app_bottom_tab_item.dart';
 import 'package:masarifak/core/widgets/app_choice_cards.dart';
 import 'package:masarifak/core/widgets/app_choice_chips.dart';
 import 'package:masarifak/core/widgets/app_choice_option.dart';
@@ -117,6 +119,42 @@ void main() {
 
     expect(find.byIcon(Icons.warning_amber_outlined), findsOneWidget);
     expect(find.text('Careful'), findsOneWidget);
+  });
+
+  testWidgets('bottom tab bar keeps its own height and reports taps', (tester) async {
+    int? tapped;
+    await pumpLocalized(
+      tester,
+      Column(
+        children: [
+          const Expanded(child: SizedBox.expand()),
+          AppBottomTabBar(
+            selectedIndex: 0,
+            onSelected: (index) => tapped = index,
+            items: const [
+              AppBottomTabItem(
+                icon: Icons.home_outlined,
+                selectedIcon: Icons.home,
+                label: 'Home',
+              ),
+              AppBottomTabItem(
+                icon: Icons.list_outlined,
+                selectedIcon: Icons.list,
+                label: 'List',
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+
+    final barHeight = tester.getSize(find.byType(AppBottomTabBar)).height;
+    expect(barHeight, lessThan(tester.view.physicalSize.height / 4));
+    expect(find.byIcon(Icons.home), findsOneWidget);
+    expect(find.byIcon(Icons.list_outlined), findsOneWidget);
+
+    await tester.tap(find.text('List'));
+    expect(tapped, 1);
   });
 
   testWidgets('bottom sheet shows its title, body and footer and closes', (tester) async {

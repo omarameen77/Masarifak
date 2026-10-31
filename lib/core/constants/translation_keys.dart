@@ -137,6 +137,14 @@ abstract final class TranslationKeys {
   static const String summaryStart = 'summary_start';
   static const String summaryLinkTelegram = 'summary_link_telegram';
   static const String commonRetry = 'common_retry';
+  static const String tabHome = 'tab_home';
+  static const String tabExpenses = 'tab_expenses';
+  static const String tabObligations = 'tab_obligations';
+  static const String tabAsk = 'tab_ask';
+  static const String mainNavigationLabel = 'main_navigation_label';
+  static const String expensesTitle = 'expenses_title';
+  static const String obligationsTitle = 'obligations_title';
+  static const String askTitle = 'ask_title';
   static const List<String> obligationIntervals = [
     obligationEvery3,
     obligationEvery6,

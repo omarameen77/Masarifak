@@ -13,6 +13,9 @@ import '../../features/auth/presentation/register/register_screen.dart';
 import '../../features/auth/presentation/session/session_cubit.dart';
 import '../../features/onboarding/presentation/onboarding_cubit.dart';
 import '../../features/onboarding/presentation/onboarding_intent.dart';
+import '../../features/main_layout/presentation/main_layout_cubit.dart';
+import '../../features/main_layout/presentation/main_layout_screen.dart';
+import '../../features/main_layout/presentation/main_tab.dart';
 import '../../features/onboarding/presentation/income/onboarding_income_screen.dart';
 import '../../features/onboarding/presentation/obligations/onboarding_obligations_screen.dart';
 import '../../features/onboarding/presentation/onboarding_shell.dart';
@@ -99,19 +102,46 @@ GoRouter createAppRouter({
           ),
         ],
       ),
-      GoRoute(
-        path: AppRoutes.home,
-        pageBuilder: (_, state) => fadeTransitionPage(
+      StatefulShellRoute.indexedStack(
+        pageBuilder: (_, state, navigationShell) => fadeTransitionPage(
           state,
-          const PlaceholderScreen(
-            titleKey: TranslationKeys.homeTitle,
-            showHomeActions: true,
+          BlocProvider<MainLayoutCubit>(
+            create: (_) => getIt<MainLayoutCubit>(),
+            child: MainLayoutScreen(navigationShell: navigationShell),
           ),
         ),
+        branches: [
+          for (final tab in MainTab.values)
+            StatefulShellBranch(
+              routes: [
+                GoRoute(
+                  path: tab.route,
+                  pageBuilder: (_, state) => NoTransitionPage<void>(
+                    key: state.pageKey,
+                    child: _tabRoot(tab),
+                  ),
+                ),
+              ],
+            ),
+        ],
       ),
     ],
   );
 }
+
+Widget _tabRoot(MainTab tab) => switch (tab) {
+  MainTab.home => const PlaceholderScreen(
+    titleKey: TranslationKeys.homeTitle,
+    showHomeActions: true,
+  ),
+  MainTab.expenses => const PlaceholderScreen(
+    titleKey: TranslationKeys.expensesTitle,
+  ),
+  MainTab.obligations => const PlaceholderScreen(
+    titleKey: TranslationKeys.obligationsTitle,
+  ),
+  MainTab.ask => const PlaceholderScreen(titleKey: TranslationKeys.askTitle),
+};
 
 int _onboardingStepNumber(String path) =>
     AppRoutes.onboardingSteps.indexOf(path) + 1;
