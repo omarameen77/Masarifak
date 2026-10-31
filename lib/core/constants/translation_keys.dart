@@ -145,6 +145,71 @@ abstract final class TranslationKeys {
   static const String expensesTitle = 'expenses_title';
   static const String obligationsTitle = 'obligations_title';
   static const String askTitle = 'ask_title';
+  static const String homeDaysToPayday = 'home_days_to_payday';
+  static const String homeCycleLabel = 'home_cycle_label';
+  static const String homeNotifications = 'home_notifications';
+  static const String homeNotificationsUnread = 'home_notifications_unread';
+  static const String homeReport = 'home_report';
+  static const String homeAccount = 'home_account';
+  static const String homeRemainingLabel = 'home_remaining_label';
+  static const String homeSpendableOf = 'home_spendable_of';
+  static const String homeHowCalculated = 'home_how_calculated';
+  static const String statusOk = 'status_ok';
+  static const String statusWarn = 'status_warn';
+  static const String statusCritical = 'status_critical';
+  static const String homeTodayLabel = 'home_today_label';
+  static const String homeDailyAllowance = 'home_daily_allowance';
+  static const String homeFloorLabel = 'home_floor_label';
+  static const String homeAboveFloor = 'home_above_floor';
+  static const String homePaydayEnd = 'home_payday_end';
+  static const String homeTodayMarker = 'home_today_marker';
+  static const String homeFloorForecast = 'home_floor_forecast';
+  static const String homeFloorSafe = 'home_floor_safe';
+  static const String homeAddExpense = 'home_add_expense';
+  static const String homeScanReceipt = 'home_scan_receipt';
+  static const String homeSeeAll = 'home_see_all';
+  static const String homeSavingsTitle = 'home_savings_title';
+  static const String homeSavingsGoal = 'home_savings_goal';
+  static const String homeSavingsMonthly = 'home_savings_monthly';
+  static const String homeUpcomingTitle = 'home_upcoming_title';
+  static const String homeUpcomingEmptyTitle = 'home_upcoming_empty_title';
+  static const String homeUpcomingEmptyText = 'home_upcoming_empty_text';
+  static const String dueToday = 'due_today';
+  static const String dueTomorrow = 'due_tomorrow';
+  static const String dueIn = 'due_in';
+  static const String dueOverdue = 'due_overdue';
+  static const String obligationStatusReserved = 'obligation_status_reserved';
+  static const String obligationStatusDueSoon = 'obligation_status_due_soon';
+  static const String obligationStatusLate = 'obligation_status_late';
+  static const String obligationStatusAwaitingBill =
+      'obligation_status_awaiting_bill';
+  static const String obligationStatusCollecting =
+      'obligation_status_collecting';
+  static const String obligationStatusPaid = 'obligation_status_paid';
+  static const String obligationStatusSkipped = 'obligation_status_skipped';
+  static const String obligationStatusStopped = 'obligation_status_stopped';
+  static const String obligationStatusArrears = 'obligation_status_arrears';
+  static const String homeRecentTitle = 'home_recent_title';
+  static const String homeRecentEmptyTitle = 'home_recent_empty_title';
+  static const String homeRecentEmptyText = 'home_recent_empty_text';
+  static const String necessityNeed = 'necessity_need';
+  static const String necessityNormal = 'necessity_normal';
+  static const String necessityLux = 'necessity_lux';
+  static const String homePendingReviewTitle = 'home_pending_review_title';
+  static const String homePendingReviewAction = 'home_pending_review_action';
+  static const String homeSectionFailed = 'home_section_failed';
+  static const String homeLoading = 'home_loading';
+  static const String dateWeekdayDayMonth = 'date_weekday_day_month';
+  static const String homeLogout = 'home_logout';
+  static const List<String> weekdays = [
+    'weekday_1',
+    'weekday_2',
+    'weekday_3',
+    'weekday_4',
+    'weekday_5',
+    'weekday_6',
+    'weekday_7',
+  ];
   static const List<String> obligationIntervals = [
     obligationEvery3,
     obligationEvery6,

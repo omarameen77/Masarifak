@@ -10,6 +10,8 @@ class AppListRow extends StatelessWidget {
     this.subtitle,
     this.icon,
     this.trailing,
+    this.trailingBelow,
+    this.iconColor,
     this.onTap,
   });
 
@@ -17,6 +19,8 @@ class AppListRow extends StatelessWidget {
   final String? subtitle;
   final IconData? icon;
   final String? trailing;
+  final Widget? trailingBelow;
+  final Color? iconColor;
   final VoidCallback? onTap;
 
   @override
@@ -44,7 +48,7 @@ class AppListRow extends StatelessWidget {
                   child: Icon(
                     icon,
                     size: AppDimensions.choiceIconSize,
-                    color: colors.ink2,
+                    color: iconColor ?? colors.ink2,
                   ),
                 ),
                 const SizedBox(width: AppDimensions.md),
@@ -76,14 +80,23 @@ class AppListRow extends StatelessWidget {
               ),
               if (trailing case final trailing?) ...[
                 const SizedBox(width: AppDimensions.md),
-                Text(
-                  trailing,
-                  style: TextStyle(
-                    fontSize: AppDimensions.bodyFontSize,
-                    fontWeight: FontWeight.w600,
-                    color: colors.ink,
-                    fontFeatures: const [FontFeature.tabularFigures()],
-                  ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Text(
+                      trailing,
+                      style: TextStyle(
+                        fontSize: AppDimensions.bodyFontSize,
+                        fontWeight: FontWeight.w600,
+                        color: colors.ink,
+                        fontFeatures: const [FontFeature.tabularFigures()],
+                      ),
+                    ),
+                    if (trailingBelow case final below?) ...[
+                      const SizedBox(height: AppDimensions.xs),
+                      below,
+                    ],
+                  ],
                 ),
               ],
             ],

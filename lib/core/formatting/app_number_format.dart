@@ -19,18 +19,22 @@ class AppNumberFormat {
   String year(int value) => NumberFormat(NumberSymbols.plainPattern, _locale)
       .format(value);
 
+  String amount(int minor, {required int exponent, bool rounded = false}) {
+    final format = NumberFormat.decimalPattern(_locale)
+      ..maximumFractionDigits = rounded ? 0 : exponent;
+    final sign = minor < 0 ? NumberSymbols.minus : '';
+    final major = minor.abs() / pow(NumberSymbols.base, exponent);
+    return '$sign${format.format(major)}';
+  }
+
   String money(
     int minor, {
     required int exponent,
     required String symbol,
     bool rounded = false,
-  }) {
-    final format = NumberFormat.decimalPattern(_locale)
-      ..maximumFractionDigits = rounded ? 0 : exponent;
-    final sign = minor < 0 ? NumberSymbols.minus : '';
-    final major = minor.abs() / pow(NumberSymbols.base, exponent);
-    return '$sign${format.format(major)}${NumberSymbols.space}$symbol';
-  }
+  }) =>
+      '${amount(minor, exponent: exponent, rounded: rounded)}'
+      '${NumberSymbols.space}$symbol';
 
   String percent(double fraction) =>
       NumberFormat.percentPattern(_locale).format(fraction);

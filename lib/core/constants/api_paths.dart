@@ -11,4 +11,10 @@ abstract final class ApiPaths {
   static const String onboarding = '/onboarding';
   static const String dryRunQuery = 'dry_run';
   static const int dryRunEnabled = 1;
+  static const String currentCycleSummary = '/cycles/current/summary';
+  static const String pockets = '/pockets';
+  static const String obligations = '/obligations';
+  static const String expenses = '/expenses';
+  static const String viewQuery = 'view';
+  static const String limitQuery = 'limit';
 }
